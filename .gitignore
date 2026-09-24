@@ -1,0 +1,36 @@
+# ========================================
+# Duplicator
+# ========================================
+
+duplicator/*.zip
+duplicator/*.tar
+duplicator/*.gz
+
+# ========================================
+# WordPress
+# ========================================
+
+wordpress/wp-admin/
+wordpress/wp-includes/
+wordpress/wp-content/uploads/
+
+# Cache
+wordpress/wp-content/cache/
+wordpress/wp-content/upgrade/
+
+# Logs
+*.log
+
+# ========================================
+# Environment / secrets
+# ========================================
+
+.env
+
+# ========================================
+# Sistema / IDE
+# ========================================
+
+.DS_Store
+Thumbs.db
+.vscode/
