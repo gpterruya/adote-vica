@@ -8,6 +8,7 @@ services:
       - "8080:80"
     volumes:
       - ./duplicator:/var/www/html
+      - ./plugins/vica-custom:/var/www/html/wp-content/plugins/vica-custom
     depends_on:
       - db
 

@@ -1,0 +1,50 @@
+/* =========================================================
+   Vi.Ca Custom — ajustes de front-end sobre o Elementor
+   Os seletores usam os IDs dos elementos do Elementor
+   (elementor-element-xxxxxxx). Se um elemento for apagado e
+   recriado no editor, o ID muda e a regra deixa de valer.
+   ========================================================= */
+
+/* ---------------------------------------------------------
+   Overflow horizontal no desktop entre ~1025px e ~1415px
+   (iPad paisagem 1180, notebooks 1280/1366).
+   Estes containers têm largura fixa de 1400px no desktop;
+   aqui eles só encolhem quando a tela é menor que isso.
+   Em telas >= 1440px o layout fica idêntico ao original.
+   --------------------------------------------------------- */
+.elementor .elementor-element.elementor-element-a77ee8c, /* Nossos diferenciais */
+.elementor .elementor-element.elementor-element-af3cf04, /* Protocolos de saúde e cuidados */
+.elementor .elementor-element.elementor-element-7840de6, /* Valores de referência / Compromissos */
+.elementor .elementor-element.elementor-element-a31f9c0, /* ONGs e protetores parceiros */
+.elementor .elementor-element.elementor-element-955b264  /* Pronto para adotar? */ {
+	max-width: calc(100vw - 32px);
+}
+
+/* Quem adota muda vidas (versão desktop): imagem decorativa
+   com posição absoluta passa da borda direita em ~1180px. */
+.elementor .elementor-element.elementor-element-7bc55a9 {
+	overflow-x: clip;
+}
+
+/* Na mídia: ícone decorativo passa ~2px da borda em ~1025–1100px. */
+.elementor .elementor-element.elementor-element-8a41f57 {
+	overflow-x: clip;
+}
+
+/* ---------------------------------------------------------
+   ONGs e protetores parceiros (desktop): o coração rosa com "?"
+   era puxado para trás com margin-left negativa (-337px) e
+   ficava sobre o título. Aqui o título ocupa só a largura do
+   texto e o coração fica logo depois dele, em qualquer largura.
+   --------------------------------------------------------- */
+@media (min-width: 1025px) {
+	.elementor .elementor-element.elementor-element-9619da9 { /* título */
+		width: auto !important;
+		max-width: none !important;
+		flex: 0 0 auto !important;
+	}
+
+	.elementor .elementor-element.elementor-element-7de4b9e { /* coração */
+		margin-left: 8px !important;
+	}
+}
