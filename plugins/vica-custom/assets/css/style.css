@@ -48,3 +48,82 @@
 		margin-left: 8px !important;
 	}
 }
+
+/* ---------------------------------------------------------
+   Hero (5d4e108) — celular deitado, layout mobile (< 768px).
+   A imagem de fundo do mobile é vertical e, com o celular
+   deitado, fica ampliada pela largura: ancorada no topo, o
+   cachorro era cortado e sobrava fundo vazio. Ancorada embaixo,
+   ele aparece inteiro. No retrato não muda nada, porque lá a
+   imagem é ajustada pela altura.
+   --------------------------------------------------------- */
+@media (max-width: 767px) {
+	.elementor .elementor-element.elementor-element-5d4e108 {
+		background-position: 50% 100% !important;
+	}
+}
+
+/* ---------------------------------------------------------
+   Hero — celulares grandes deitados (812–932px de largura),
+   que caem no layout de tablet, mas com ~375–430px de altura.
+   Com o título a 55px, só o título cabia na primeira tela.
+   Aqui o hero é compactado para o botão aparecer sem rolar.
+   O max-height deixa tablets de verdade (retrato e paisagem)
+   intactos.
+   --------------------------------------------------------- */
+@media (min-width: 768px) and (max-width: 1024px) and (max-height: 500px) {
+	.elementor .elementor-element.elementor-element-5d4e108 {
+		min-height: 100vh !important;
+		padding-top: 12px !important;
+		padding-bottom: 24px !important;
+		--gap: 10px 10px !important;
+		--row-gap: 10px !important;
+		row-gap: 10px !important;
+	}
+
+	/* Logo */
+	.elementor .elementor-element.elementor-element-f6420b7 .elementor-icon {
+		font-size: 28px !important;
+	}
+
+	.elementor .elementor-element.elementor-element-f6420b7 svg {
+		height: 28px !important;
+	}
+
+	/* "Adote Vi.Ca — Centro de Adoção" */
+	.elementor .elementor-element.elementor-element-b965320 .elementor-heading-title {
+		font-size: 32px !important;
+		line-height: 1.1 !important;
+	}
+
+	/* "responsável" */
+	.elementor .elementor-element.elementor-element-e6ddbb5 {
+		margin-top: -6px !important;
+	}
+
+	.elementor .elementor-element.elementor-element-e6ddbb5 .elementor-heading-title {
+		font-size: 50px !important;
+		line-height: 1.1 !important;
+	}
+
+	/* Texto de apresentação */
+	.elementor .elementor-element.elementor-element-60d5882 {
+		--container-widget-width: 46% !important;
+		width: 46% !important;
+	}
+
+	.elementor .elementor-element.elementor-element-60d5882 p {
+		font-size: 15px !important;
+		line-height: 1.45 !important;
+	}
+
+	.elementor .elementor-element.elementor-element-60d5882 p:last-child {
+		margin-bottom: 0 !important;
+	}
+
+	/* Botão "conheça nossos compromissos" */
+	.elementor .elementor-element.elementor-element-557bc3f .elementor-button {
+		padding: 14px 24px !important;
+		font-size: 17px !important;
+	}
+}
