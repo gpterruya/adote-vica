@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Vi.Ca Custom
  * Description: Customizações de front-end do Adote Vi.Ca (CSS/PHP versionados no Git).
- * Version:     1.3.0
+ * Version:     1.4.0
  * Author:      Adote Vi.Ca
  * Requires PHP: 8.0
  */
@@ -23,6 +23,41 @@ add_action( 'wp_enqueue_scripts', function () {
 		file_exists( $file ) ? (string) filemtime( $file ) : '1.0.0'
 	);
 }, 20 );
+
+/*
+ * SVGs otimizados (assets/img/). O Elementor embute no HTML o conteúdo dos
+ * SVGs enviados em widgets de ícone, lido do meta "_elementor_inline_svg".
+ * Os originais de uploads/2025/10/ eram enormes: logo do topo e ícones com
+ * textura (~4 mil curvas e coordenadas com até 8 casas decimais, ~210 KB cada)
+ * e logo do rodapé (PNG 3201×2601 em base64 usado como máscara, 290 KB).
+ * Um SVG de uploads/2025/10/ que tenha versão com o mesmo nome em assets/img/
+ * é entregue otimizado, sem alterar banco nem uploads.
+ * Depois de publicar, limpe o cache do Elementor (Ferramentas → Limpar
+ * arquivos e dados), que guarda o HTML dos widgets por até 24 h.
+ */
+add_filter( 'get_post_metadata', function ( $value, $object_id, $meta_key ) {
+	if ( '_elementor_inline_svg' !== $meta_key ) {
+		return $value;
+	}
+
+	$file = get_post_meta( $object_id, '_wp_attached_file', true );
+
+	if ( ! is_string( $file ) || ! str_starts_with( $file, '2025/10/' ) || ! str_ends_with( $file, '.svg' ) ) {
+		return $value;
+	}
+
+	$path = __DIR__ . '/assets/img/' . basename( $file );
+
+	if ( ! is_readable( $path ) ) {
+		return $value;
+	}
+
+	static $cache = [];
+	$cache[ $path ] ??= file_get_contents( $path );
+
+	// get_metadata() usa o índice 0 quando $single é true.
+	return [ $cache[ $path ] ];
+}, 10, 3 );
 
 /*
  * Página 404 com o visual do site (templates/404.php + assets/css/404.css),
