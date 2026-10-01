@@ -297,6 +297,42 @@ O plugin `vica-custom` não é afetado, porque vive fora de `duplicator/` e é m
 
 ---
 
+## 6. Google Search Console
+
+O site está cadastrado no [Google Search Console](https://search.google.com/search-console), onde dá para ver como ele aparece na busca do Google e pedir que o Google leia uma página de novo.
+
+| Item | Configuração |
+|---|---|
+| Propriedade | Prefixo de URL: `https://adotevica.com.br/` |
+| Verificação | Meta tag `google-site-verification`, inserida pelo **Yoast SEO → Configurações → Conexões do site → Google** |
+| Sitemap enviado | `sitemap_index.xml` (gerado pelo Yoast; hoje lista só a página inicial) |
+
+> ⚠️ **Não apague o código de verificação do Yoast.** O Google confere a tag de tempos em tempos; se ela sumir, a propriedade deixa de estar verificada e os relatórios param de ser atualizados.
+
+Para conferir se a tag está no ar:
+
+```bash
+curl -s https://adotevica.com.br/ | grep -o '<meta name="google-site-verification"[^>]*>'
+```
+
+### Depois de mudar um conteúdo importante
+
+O Google pode continuar mostrando o texto antigo nos resultados por dias. Para acelerar:
+
+1. No Search Console, use **Inspecionar URL** (barra do topo) com `https://adotevica.com.br/`.
+2. Clique em **Solicitar indexação** e espere a confirmação.
+3. Para acompanhar, veja o campo **Último rastreamento** na mesma inspeção, ou pesquise no Google por `site:adotevica.com.br <trecho removido>`.
+
+Se depois de uma semana o resultado ainda mostrar o texto antigo, peça a remoção em **Remoções → Remoções de conteúdo desatualizado**.
+
+### Para mudar a verificação ou o sitemap
+
+- **Outra conta precisa de acesso:** em **Configurações → Usuários e permissões**, adicione o e-mail. Não é preciso verificar de novo.
+- **Trocar para uma propriedade de domínio** (cobre `http`, `https` e `www` de uma vez): crie uma propriedade do tipo **Domínio** (`adotevica.com.br`) e verifique com o registro **TXT** que o Google indicar, adicionado no **DNS da Cloudflare**.
+- **O site ganhar páginas novas:** o Yoast as inclui no `sitemap_index.xml` automaticamente. Não é preciso reenviar o sitemap.
+
+---
+
 ## Problemas comuns
 
 | Sintoma | Causa provável / solução |
@@ -312,4 +348,5 @@ O plugin `vica-custom` não é afetado, porque vive fora de `duplicator/` e é m
 | Página nova ou URL nova responde 404 inesperadamente | O plugin responde 404 em `/category/…` e `/e-floating-buttons/…` para visitantes, e redireciona `/author/…` para a home. Se o site passar a ter blog, ajuste isso em `vica-custom.php`. |
 | A regra não se aplica a um elemento | O ID do Elementor mudou, ou falta especificidade no seletor. Inspecione o elemento e compare o `data-id`. |
 | O Duplicator reclama de `ZipArchive` | Imagem antiga. Reconstrua com `docker compose build --no-cache web`. |
+| Search Console diz que a propriedade não está mais verificada | O código de verificação saiu do Yoast (ou o Yoast foi desativado). Cole o código de novo em **Yoast SEO → Configurações → Conexões do site → Google**, limpe o cache do WP Rocket e clique em **Verificar** (seção 6). |
 | Docker Desktop mostra erro de WSL ao abrir, depois de um `wsl --update` | Atualize o Docker Desktop para a versão mais recente. **Não** use "Reset to factory defaults" nem "Clean / Purge data": essas opções apagam o banco local. |
