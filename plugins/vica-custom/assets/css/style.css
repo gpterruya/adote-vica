@@ -50,6 +50,23 @@
 }
 
 /* ---------------------------------------------------------
+   Custos e transparência — tablet deitado (900–1024px).
+   Os cards usam SVGs de fundo (seringa / estetoscópio, 563×313)
+   com "cover" centralizado. Nessa largura o card fica mais
+   "quadrado" que o desenho, o corte lateral puxa a ilustração
+   ~50px para a esquerda e ela passa por cima de "animal" e
+   "cuidadores". Deslocar a âncora para 30% livra o texto sem
+   cortar demais o desenho. O tablet em pé (768px, card com
+   outra proporção) fica como estava.
+   --------------------------------------------------------- */
+@media (min-width: 900px) and (max-width: 1024px) {
+	.elementor .elementor-element.elementor-element-6da732b, /* Custos diretos do animal */
+	.elementor .elementor-element.elementor-element-6a8586a  /* Custos de estrutura */ {
+		background-position: 30% 50% !important;
+	}
+}
+
+/* ---------------------------------------------------------
    Hero (5d4e108) — celular deitado, layout mobile (< 768px).
    A imagem de fundo do mobile é vertical e, com o celular
    deitado, fica ampliada pela largura: ancorada no topo, o
