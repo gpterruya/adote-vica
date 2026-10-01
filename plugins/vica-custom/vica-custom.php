@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Vi.Ca Custom
  * Description: Customizações de front-end do Adote Vi.Ca (CSS/PHP versionados no Git).
- * Version:     1.2.0
+ * Version:     1.3.0
  * Author:      Adote Vi.Ca
  * Requires PHP: 8.0
  */
@@ -76,6 +76,23 @@ add_action( 'template_redirect', function () {
 	if ( is_author() || isset( $_GET['author'] ) ) {
 		wp_safe_redirect( home_url( '/' ), 301 );
 		exit;
+	}
+}, 1 );
+
+// URLs residuais sem conteúdo público respondem 404 (com a página 404 do plugin):
+// - /e-floating-buttons/<nome>/: o botão flutuante do Elementor exibido como página;
+// - /category/<nome>/: arquivos de categoria (o site não tem blog).
+// Quem pode editar continua vendo, para não quebrar o editor/preview do Elementor.
+add_action( 'template_redirect', function () {
+	if ( current_user_can( 'edit_posts' ) ) {
+		return;
+	}
+
+	if ( is_singular( 'e-floating-buttons' ) || is_category() ) {
+		global $wp_query;
+		$wp_query->set_404();
+		status_header( 404 );
+		nocache_headers();
 	}
 }, 1 );
 
