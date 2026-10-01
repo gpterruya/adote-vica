@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Vi.Ca Custom
  * Description: Customizações de front-end do Adote Vi.Ca (CSS/PHP versionados no Git).
- * Version:     1.1.0
+ * Version:     1.2.0
  * Author:      Adote Vi.Ca
  * Requires PHP: 8.0
  */
@@ -20,6 +20,29 @@ add_action( 'wp_enqueue_scripts', function () {
 		// Carrega depois do CSS do Elementor para poder sobrescrevê-lo.
 		wp_style_is( 'elementor-frontend', 'registered' ) ? [ 'elementor-frontend' ] : [],
 		// Versão pelo mtime do arquivo: cada alteração invalida o cache do navegador.
+		file_exists( $file ) ? (string) filemtime( $file ) : '1.0.0'
+	);
+}, 20 );
+
+/*
+ * Página 404 com o visual do site (templates/404.php + assets/css/404.css),
+ * no lugar do 404 básico do tema.
+ */
+add_filter( 'template_include', function ( $template ) {
+	return is_404() ? __DIR__ . '/templates/404.php' : $template;
+}, 99 );
+
+add_action( 'wp_enqueue_scripts', function () {
+	if ( ! is_404() ) {
+		return;
+	}
+
+	$file = __DIR__ . '/assets/css/404.css';
+
+	wp_enqueue_style(
+		'vica-custom-404',
+		plugins_url( 'assets/css/404.css', __FILE__ ),
+		[],
 		file_exists( $file ) ? (string) filemtime( $file ) : '1.0.0'
 	);
 }, 20 );

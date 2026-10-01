@@ -1,0 +1,214 @@
+/* =========================================================
+   Vi.Ca Custom — página 404 (templates/404.php)
+   Fontes e cores iguais às da página inicial (Elementor).
+   As fontes ficam em wp-content/uploads/2025/10/.
+   ========================================================= */
+
+@font-face {
+	font-family: "TT Hazelnuts";
+	src: url("../../../../uploads/2025/10/TTHazelnuts-Medium-Trial-BF6401510beb891.ttf") format("truetype");
+	font-weight: 500 600;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: "TT Hazelnuts";
+	src: url("../../../../uploads/2025/10/TTHazelnuts-Bold-Trial-BF6401510d9e770.ttf") format("truetype");
+	font-weight: 700;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: "Intro Script";
+	src: url("../../../../uploads/2025/10/IntroScript-Medium.ttf") format("truetype");
+	font-weight: 400;
+	font-display: swap;
+}
+
+body.vica-404 {
+	--vica-cinza: #4d4d4d;
+	--vica-texto: #7a7a7a;
+	--vica-azul: #547193;
+	--vica-laranja: #f15a24;
+	--vica-bege: #f9f2e4;
+	--vica-escuro: #333333;
+
+	margin: 0;
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+	background: #ffffff;
+	color: var(--vica-texto);
+	font-family: "TT Hazelnuts", sans-serif;
+	font-weight: 500;
+}
+
+.vica-404 a {
+	color: var(--vica-azul);
+}
+
+.vica-404__header {
+	padding: 24px 20px 0;
+	max-width: 1140px;
+	width: 100%;
+	margin: 0 auto;
+	box-sizing: border-box;
+}
+
+.vica-404__header img {
+	display: block;
+	width: 140px;
+	height: auto;
+}
+
+.vica-404__main {
+	flex: 1;
+	display: flex;
+	align-items: center;
+	padding: 24px 20px 48px;
+}
+
+.vica-404__card {
+	max-width: 1140px;
+	width: 100%;
+	margin: 0 auto;
+	box-sizing: border-box;
+	background: var(--vica-bege);
+	border-radius: 32px;
+	padding: 48px 56px;
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	align-items: center;
+	gap: 32px;
+}
+
+.vica-404__ops {
+	margin: 0;
+	font-family: "Intro Script", cursive;
+	font-size: 88px;
+	line-height: 1;
+	color: var(--vica-azul);
+}
+
+.vica-404__titulo {
+	margin: 8px 0 16px;
+	font-family: "TT Hazelnuts", sans-serif;
+	font-weight: 500;
+	font-size: 44px;
+	line-height: 1.1;
+	color: var(--vica-cinza);
+}
+
+.vica-404__descricao {
+	margin: 0 0 32px;
+	font-size: 20px;
+	line-height: 1.5;
+	max-width: 30em;
+}
+
+.vica-404__botao {
+	display: inline-block;
+	padding: 20px 32px;
+	border-radius: 45px;
+	background: var(--vica-laranja);
+	color: var(--vica-bege) !important;
+	font-weight: 700;
+	font-size: 18px;
+	line-height: 1;
+	text-decoration: none;
+	transition: filter 0.2s;
+}
+
+.vica-404__botao:hover,
+.vica-404__botao:focus-visible {
+	filter: brightness(0.92);
+}
+
+.vica-404__contato {
+	margin: 20px 0 0;
+	font-size: 16px;
+}
+
+.vica-404__imagem {
+	width: 100%;
+	height: auto;
+	display: block;
+}
+
+.vica-404__footer {
+	background: var(--vica-bege);
+	color: var(--vica-escuro);
+	text-align: center;
+	font-size: 14px;
+	line-height: 1.5;
+	padding: 24px 20px 96px; /* espaço para o botão flutuante de telefone */
+}
+
+.vica-404__footer p {
+	margin: 0 0 4px;
+}
+
+.vica-404__footer a {
+	color: inherit;
+}
+
+/* Tablet */
+@media (max-width: 1024px) {
+	.vica-404__card {
+		padding: 40px;
+	}
+
+	.vica-404__ops {
+		font-size: 72px;
+	}
+
+	.vica-404__titulo {
+		font-size: 36px;
+	}
+
+	.vica-404__descricao {
+		font-size: 18px;
+	}
+}
+
+/* Mobile: texto em cima, imagem embaixo */
+@media (max-width: 767px) {
+	.vica-404__header {
+		text-align: center;
+	}
+
+	.vica-404__header img {
+		margin: 0 auto;
+		width: 120px;
+	}
+
+	.vica-404__main {
+		padding: 16px 16px 32px;
+	}
+
+	.vica-404__card {
+		grid-template-columns: 1fr;
+		padding: 32px 24px;
+		border-radius: 24px;
+		text-align: center;
+		gap: 24px;
+	}
+
+	.vica-404__ops {
+		font-size: 64px;
+	}
+
+	.vica-404__titulo {
+		font-size: 30px;
+	}
+
+	.vica-404__descricao {
+		font-size: 16px;
+		margin: 0 auto 24px;
+	}
+
+	.vica-404__imagem {
+		max-width: 320px;
+		margin: 0 auto;
+	}
+}
