@@ -50,19 +50,60 @@
 }
 
 /* ---------------------------------------------------------
-   Custos e transparência — tablet deitado (900–1024px).
-   Os cards usam SVGs de fundo (seringa / estetoscópio, 563×313)
-   com "cover" centralizado. Nessa largura o card fica mais
-   "quadrado" que o desenho, o corte lateral puxa a ilustração
-   ~50px para a esquerda e ela passa por cima de "animal" e
-   "cuidadores". Deslocar a âncora para 30% livra o texto sem
-   cortar demais o desenho. O tablet em pé (768px, card com
-   outra proporção) fica como estava.
+   Custos e transparência — cards "Custos Diretos – Responsabilidade
+   do Tutor" (6da732b) e "Custos de estrutura" (6a8586a), a partir
+   do tablet (≥ 768px).
+
+   O fundo de cada card é um SVG 563×313 que já traz o retângulo
+   bege de cantos arredondados + a ilustração (seringa /
+   estetoscópio) no canto superior direito. Com "cover", quando o
+   texto do card cresce (o card de custos diretos passou a ter a
+   lista do jurídico), o SVG inteiro é ampliado pela altura e a
+   ilustração vira um borrão gigante sobre o texto.
+   Aqui o SVG fica na largura do card, ancorado no topo (tamanho e
+   posição originais da ilustração) e o resto do card é completado
+   com o mesmo bege (#F9F2E4), seja qual for a altura do texto.
    --------------------------------------------------------- */
+@media (min-width: 768px) {
+	.elementor .elementor-element.elementor-element-6da732b,
+	.elementor .elementor-element.elementor-element-6a8586a {
+		background-color: #F9F2E4 !important;
+		background-size: 100% auto !important;
+		background-position: 50% 0 !important;
+		background-repeat: no-repeat !important;
+	}
+}
+
+/* Tablet em pé (768–899px): o card fica estreito demais para a
+   ilustração e o texto dividirem a largura; só o fundo bege. */
+@media (min-width: 768px) and (max-width: 899px) {
+	.elementor .elementor-element.elementor-element-6da732b,
+	.elementor .elementor-element.elementor-element-6a8586a {
+		background-image: none !important;
+	}
+}
+
+/* Tablet deitado (900–1024px): título e lista numa coluna de 64%,
+   que termina antes da seringa e do estetoscópio. */
 @media (min-width: 900px) and (max-width: 1024px) {
-	.elementor .elementor-element.elementor-element-6da732b, /* Custos diretos do animal */
-	.elementor .elementor-element.elementor-element-6a8586a  /* Custos de estrutura */ {
-		background-position: 30% 50% !important;
+	.elementor .elementor-element.elementor-element-d6c021e, /* título custos diretos */
+	.elementor .elementor-element.elementor-element-162c6de, /* lista custos diretos */
+	.elementor .elementor-element.elementor-element-307971b, /* título custos de estrutura */
+	.elementor .elementor-element.elementor-element-9514f40  /* lista custos de estrutura */ {
+		--container-widget-width: 64% !important;
+		width: 64% !important;
+		max-width: 64% !important;
+	}
+}
+
+/* Desktop: o título "Custos Diretos – Responsabilidade do Tutor" é
+   mais longo que o antigo e passava por baixo da seringa; fica com a
+   mesma largura da lista (76%). */
+@media (min-width: 1025px) {
+	.elementor .elementor-element.elementor-element-d6c021e {
+		--container-widget-width: 76% !important;
+		width: 76% !important;
+		max-width: 76% !important;
 	}
 }
 
