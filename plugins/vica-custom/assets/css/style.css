@@ -96,6 +96,31 @@
 	}
 }
 
+/* ---------------------------------------------------------
+   Container c6a37b5 (antigo "Valores de referência" + "Compromissos
+   e limites"). A pedido do jurídico os valores foram removidos e
+   ficaram só a faixa azul "Valores refletem protocolos…" (fb6a879) e
+   "Compromissos e limites". O container ainda tinha min-height de
+   1685px com conteúdo centralizado (≈ 400px vazios acima e abaixo no
+   tablet/desktop) e a faixa tinha margem negativa (−80px / −66px)
+   para subir sobre os cards de valores — no celular ela passava a
+   cobrir o card "Custos de estrutura".
+   --------------------------------------------------------- */
+.elementor .elementor-element.elementor-element-c6a37b5 {
+	--min-height: 0px !important;
+	min-height: 0 !important;
+}
+
+.elementor .elementor-element.elementor-element-fb6a879 { /* faixa azul */
+	margin-top: 24px !important;
+}
+
+@media (min-width: 768px) {
+	.elementor .elementor-element.elementor-element-fb6a879 {
+		margin-top: 40px !important;
+	}
+}
+
 /* Desktop: o título "Custos Diretos – Responsabilidade do Tutor" é
    mais longo que o antigo e passava por baixo da seringa; fica com a
    mesma largura da lista (76%). */
