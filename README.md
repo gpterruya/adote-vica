@@ -210,6 +210,31 @@ Para aplicar a regra só em um breakpoint, use media queries com os mesmos limit
 
 > O Elementor também tem **elementos duplicados por dispositivo** (uma versão oculta no desktop e outra oculta no tablet/celular). Um ajuste de texto ou de CSS pode precisar ser feito nas duas.
 
+#### Hero da página inicial
+
+O topo da página inicial (container `5d4e108`) é o trecho mais ajustado do CSS. Ele foi calibrado para o texto atual:
+
+| Elemento | Widget | Texto | Tag HTML |
+|---|---|---|---|
+| Título | `b965320` | **Adote Vi.Ca — Centro de REABILITAÇÃO e Adoção** | `h1` (o único H1 da página) |
+| Palavra manuscrita | `e6ddbb5` | responsável | `span` |
+| Texto de apresentação | `60d5882` | Somos uma empresa privada… | — |
+| Botão | `557bc3f` | conheça nossos compromissos | — |
+
+Regras em `style.css` que dependem do tamanho desse título:
+
+- **Tablet (768–1024px):** título em `min(55px, 6vw)`, para "REABILITAÇÃO" caber na coluna sem passar por cima da foto no tablet em pé.
+- **Celular grande deitado (768–1024px de largura, até 500px de altura):** título a 28px numa coluna de 52%, em 2 linhas.
+- **Celular deitado (até 767px de largura, até 500px de altura):** título a 30px, "responsável" a 38px e espaços menores.
+
+> ⚠️ **Se o título, o texto ou o botão do hero mudarem**, teste de novo em 375×812, 568×320, 740×360, 812×375, 932×430, 768×1024, 1024×768 e no desktop: o botão precisa continuar visível na primeira tela dos celulares deitados, e o título não pode passar da coluna no tablet. Dá para simular um texto novo no console do navegador, sem mexer no Elementor:
+>
+> ```js
+> document.querySelector('.elementor-element-b965320 .elementor-heading-title').textContent = 'Novo título aqui'
+> ```
+
+Mantenha a tag **H1** no título e **span** no "responsável" (Elementor → widget → **Conteúdo → Tag HTML**). Elas não mudam o visual, mas o Google usa o H1 como título principal da página.
+
 ### 3.4 SVGs otimizados
 
 O Elementor **embute no HTML** o conteúdo dos SVGs enviados em widgets de ícone (lido do meta `_elementor_inline_svg`). Os SVGs exportados com textura vinham com milhares de curvas e coordenadas de 8 casas decimais (~210 KB por ícone), e a página inicial chegava a 2,7 MB de HTML.
@@ -314,6 +339,24 @@ Para conferir se a tag está no ar:
 ```bash
 curl -s https://adotevica.com.br/ | grep -o '<meta name="google-site-verification"[^>]*>'
 ```
+
+### Título da página inicial no Google
+
+O título que aparece na aba do navegador, no Google e na prévia de links (WhatsApp, redes) **não é** o título do topo da página: ele vem do Yoast.
+
+| Onde aparece | Valor atual | Onde editar |
+|---|---|---|
+| `<title>`, `og:title` e dados estruturados | Adote Vi.Ca - Centro de Reabilitação e Adoção Responsável | **Páginas → Página Principal → Editar** (editor do WordPress, não o Elementor) → quadro **Yoast SEO → Aparência de pesquisa → Título de SEO** |
+| Meta descrição (texto cinza no Google) | Somos uma empresa privada com o objetivo de conectar animais resgatados… | No mesmo lugar, campo **Meta descrição** |
+| H1 (título visível no topo) | Adote Vi.Ca — Centro de REABILITAÇÃO e Adoção | Elementor (seção 3.3, "Hero da página inicial") |
+
+O título configurado em **Yoast SEO → Configurações** é só um modelo geral; como a página inicial é uma página fixa, vale o campo da própria página. Depois de salvar, clique em **Atualizar**, limpe o cache do WP Rocket e confira:
+
+```bash
+curl -s https://adotevica.com.br/ | grep -o '<title>[^<]*</title>'
+```
+
+Prévias de links já compartilhados podem continuar antigas por um tempo (o WhatsApp guarda a prévia em cache).
 
 ### Depois de mudar um conteúdo importante
 
