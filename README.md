@@ -154,7 +154,7 @@ Tudo o que é código próprio do site fica no plugin, versionado no Git e publi
 
 | Função | Onde | Observação |
 |---|---|---|
-| Ajustes de layout sobre o Elementor (overflow no desktop, hero no celular deitado, cards de "Custos" no tablet, coração de "ONGs"…) | `assets/css/style.css` | Carregado **depois** do CSS do Elementor, então sobrescreve o editor. |
+| Ajustes de layout sobre o Elementor (overflow no desktop, hero no celular deitado, cards de "Custos", espaçamento após a remoção dos valores, coração de "ONGs"…) | `assets/css/style.css` | Carregado **depois** do CSS do Elementor, então sobrescreve o editor. |
 | Página 404 com o visual do site | `templates/404.php` + `assets/css/404.css` | Status continua 404; o CSS só carrega nessa página. |
 | SVGs otimizados (logos e ícones da página inicial) | `assets/img/*.svg` | Ver 3.4. |
 | Não expor logins do painel | `vica-custom.php` | Bloqueia `/wp-json/wp/v2/users` para visitantes, redireciona `/author/…` e `/?author=N` para a home, tira o autor do oEmbed e do sitemap do Yoast. |
@@ -253,6 +253,31 @@ Para conferir se as duas versões estão iguais em produção, cole no console d
 ```
 
 > **Ao colar texto no Elementor, use `Ctrl+Shift+V`** (colar sem formatação). Um `Ctrl+V` traz junto negrito, links e estilos da origem (e-mail, WhatsApp, documentos), e o trecho fica diferente do resto do parágrafo.
+
+#### ⚠️ Valores de serviços: proibido divulgar
+
+Por orientação do jurídico (Ferraz de Camargo Advogados, outubro de 2026), em atendimento ao **Código de Ética Veterinária**, o site **não pode mostrar valores** de consultas, castrações, taxa de adoção ou outros procedimentos médico-veterinários — nem em texto oculto (o Google e qualquer pessoa leem o código da página). Antes da mudança o jurídico registrou o site como estava no **Verifact** (relatório `registro_6ac93ce86336dcf9.pdf`), que deve ficar arquivado pela empresa.
+
+O que foi alterado no Elementor:
+
+| Onde | Antes | Agora |
+|---|---|---|
+| "Importante saber", 3º card (`36386b1`) | Por norma do Código de Ética Veterinária, não é permitido divulgar valores… | **Em atendimento ao Código de Ética Veterinária, não divulgamos os valores de consultas, castrações ou outros procedimentos médico veterinários.** |
+| "Custos e transparência", card da esquerda (`d6c021e` título, `162c6de` lista) | Custos diretos do animal (castração, vacinação…) | **Custos Diretos – Responsabilidade do Tutor**: *Taxa de Adoção* (vacinação, vermifugação, testes rápidos, hemograma + bioquímico, identificação, consulta) e *Custos da Castração* ("Entre em contato conosco para informações sobre valores: (11) 3885-0749.") |
+| "Valores de referência" (container `7840de6`, com R$ 855, R$ 2.750 e um card **oculto** de R$ 780) | Exibido | **Excluído** |
+
+Mantidos: a faixa azul "Valores refletem protocolos clínicos reais…" (`fb6a879`) e "Compromissos e limites", que ficam no mesmo container (`c6a37b5`).
+
+Regras do `style.css` que dependem disso:
+
+- **Cards de custos (`6da732b`, `6a8586a`):** o fundo de cada card é um SVG com o card bege + a ilustração. Com o texto longo do jurídico, o SVG fica na largura do card, ancorado no topo, e o resto é completado com `#F9F2E4`; sem ilustração entre 768 e 899px; texto numa coluna de 64% entre 900 e 1024px; título com 76% no desktop.
+- **Container `c6a37b5`:** sem a `min-height` de 1685px e a faixa azul com margem positiva (24px no celular, 40px a partir de 768px) em vez da margem negativa que a fazia subir sobre os cards de valores.
+
+> Se algum dia valores voltarem a ser permitidos, essas regras precisam ser revistas junto. Enquanto isso, **antes de publicar qualquer conteúdo novo**, confira que nenhum valor escapou:
+>
+> ```bash
+> curl -s https://adotevica.com.br/ | grep -o 'R\$[^<]\{0,20\}'   # não deve imprimir nada
+> ```
 
 ### 3.4 SVGs otimizados
 
