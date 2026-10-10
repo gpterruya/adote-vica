@@ -235,6 +235,25 @@ Regras em `style.css` que dependem do tamanho desse título:
 
 Mantenha a tag **H1** no título e **span** no "responsável" (Elementor → widget → **Conteúdo → Tag HTML**). Elas não mudam o visual, mas o Google usa o H1 como título principal da página.
 
+#### Textos que existem em duas versões
+
+A seção **"Quem adota muda vidas"** existe duas vezes no Elementor: uma versão só para desktop (container `7bc55a9`) e outra só para tablet e celular (container `d79ca14`). Os textos dela precisam ser trocados **nas duas**, senão o site mostra informações diferentes conforme o aparelho (já aconteceu com "5 mil" × "20 mil adoções").
+
+| Texto | Desktop | Tablet e celular | Conteúdo atual |
+|---|---|---|---|
+| Parágrafo ao lado das fotos | `e55b2c6` | `a79f4d6` | O Vi.Ca é hoje o maior Centro de Reabilitação e Adoção do país. Nosso papel é preparar cães e gatos resgatados por ONGs, protetores e canis parceiros para encontrarem lares seguros e saudáveis. Com um gatil para 60 animais e um canil com 30 baias, realizamos cerca de 300 adoções por mês. |
+| Bloco azul de missão | `b4f7f97` | `48f2ee4` | Em nossa visão, um mundo sustentável… já realizou mais de 20 mil adoções desde 2017. Para que este número continue subindo… |
+
+Para achar a versão de tablet/celular no editor, troque a visualização para **Celular** (barra de baixo) ou abra o **Navegador** (`Ctrl+I`): os elementos ocultos no desktop aparecem com o ícone de olho cortado.
+
+Para conferir se as duas versões estão iguais em produção, cole no console do navegador (F12) em `https://adotevica.com.br/`:
+
+```js
+['e55b2c6', 'a79f4d6', 'b4f7f97', '48f2ee4'].map(id => id + ': ' + document.querySelector('.elementor-element-' + id).textContent.trim().replace(/\s+/g, ' '))
+```
+
+> **Ao colar texto no Elementor, use `Ctrl+Shift+V`** (colar sem formatação). Um `Ctrl+V` traz junto negrito, links e estilos da origem (e-mail, WhatsApp, documentos), e o trecho fica diferente do resto do parágrafo.
+
 ### 3.4 SVGs otimizados
 
 O Elementor **embute no HTML** o conteúdo dos SVGs enviados em widgets de ícone (lido do meta `_elementor_inline_svg`). Os SVGs exportados com textura vinham com milhares de curvas e coordenadas de 8 casas decimais (~210 KB por ícone), e a página inicial chegava a 2,7 MB de HTML.
