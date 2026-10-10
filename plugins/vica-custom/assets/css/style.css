@@ -80,16 +80,51 @@
 	}
 }
 
-/* Celular deitado e baixo (ex.: 568×320, 740×360): menos espaço
-   acima do logo (55px) e botão mais baixo, para o botão caber
-   na primeira tela. Celular em pé não é afetado (altura > 500px). */
+/* Celular deitado e baixo (ex.: 568×320, 740×360): hero compacto
+   para o botão caber na primeira tela, mesmo com o título em duas
+   linhas ("… Centro de Adoção e REABILITAÇÃO").
+   Celular em pé não é afetado (altura > 500px). */
 @media (max-width: 767px) and (max-height: 500px) {
-	.elementor .elementor-element.elementor-element-f6420b7 { /* logo */
-		margin-top: 20px !important;
+	.elementor .elementor-element.elementor-element-5d4e108 {
+		--gap: 12px 12px !important;
+		--row-gap: 12px !important;
+		row-gap: 12px !important;
+	}
+
+	.elementor .elementor-element.elementor-element-f6420b7 { /* logo: era 55px acima */
+		margin-top: 12px !important;
+	}
+
+	.elementor .elementor-element.elementor-element-b965320 .elementor-heading-title { /* título */
+		font-size: 30px !important;
+	}
+
+	/* "responsável": o Elementor o puxa 19px para cima, sobre o título;
+	   com o título em duas linhas ele encostava em "REABILITAÇÃO". */
+	.elementor .elementor-element.elementor-element-e6ddbb5 {
+		margin-top: -10px !important;
+	}
+
+	.elementor .elementor-element.elementor-element-e6ddbb5 .elementor-heading-title {
+		font-size: 38px !important;
+		line-height: 1.1 !important;
 	}
 
 	.elementor .elementor-element.elementor-element-557bc3f .elementor-button {
 		padding: 14px 24px !important;
+	}
+}
+
+/* ---------------------------------------------------------
+   Hero — título no tablet (768–1024px).
+   A 55px, "REABILITAÇÃO" não cabe na coluna do título (42%) no
+   tablet em pé: passava ~60px por cima da foto e deixava o "e"
+   sozinho numa linha. Aqui o título acompanha a largura da tela
+   (46px a 768px) e volta aos 55px a partir de ~920px.
+   --------------------------------------------------------- */
+@media (min-width: 768px) and (max-width: 1024px) {
+	.elementor .elementor-element.elementor-element-b965320 .elementor-heading-title {
+		font-size: min(55px, 6vw) !important;
 	}
 }
 
@@ -120,9 +155,15 @@
 		height: 28px !important;
 	}
 
-	/* "Adote Vi.Ca — Centro de Adoção" */
+	/* "Adote Vi.Ca — Centro de Adoção e REABILITAÇÃO": coluna mais
+	   larga para o título ocupar duas linhas em vez de três. */
+	.elementor .elementor-element.elementor-element-b965320 {
+		--container-widget-width: 52% !important;
+		width: 52% !important;
+	}
+
 	.elementor .elementor-element.elementor-element-b965320 .elementor-heading-title {
-		font-size: 32px !important;
+		font-size: 28px !important;
 		line-height: 1.1 !important;
 	}
 
