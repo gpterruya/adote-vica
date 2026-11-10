@@ -279,6 +279,21 @@ Regras do `style.css` que dependem disso:
 > curl -s https://adotevica.com.br/ | grep -o 'R\$[^<]\{0,20\}'   # não deve imprimir nada
 > ```
 
+#### Telefones de contato
+
+| Número | Tipo | Onde aparece |
+|---|---|---|
+| (11) 3885-0749 | Fixo | Rodapé, botão flutuante de telefone (template `532`, widget `4f540891`, `tel:+551138850749`), card "Custos da Castração" (`162c6de`) e página 404 do plugin (`templates/404.php`) |
+| (11) 95808-3658 | WhatsApp | **Só no rodapé**, abaixo do fixo, com link `https://wa.me/5511958083658` (abre em nova aba) |
+
+O rodapé faz parte da própria página inicial (seção `4451bd9`), não é um template global, e existe uma única versão para todos os aparelhos. O texto fica no campo **Descrição** do widget Caixa de imagem `b119f04` ("Centro de Adoção Responsável"), em HTML:
+
+```html
+<b>Endereço:</b> R. Pamplona, 1481 - Jardins, São Paulo - SP, 01405-003<br><b>Telefone:</b> (11) 3885-0749<br><b>WhatsApp:</b> <a href="https://wa.me/5511958083658" target="_blank" rel="noopener" style="color: inherit;">(11) 95808-3658</a>
+```
+
+O `style="color: inherit;"` deixa o link no mesmo cinza do texto; sem ele o link fica rosa, que é a cor padrão de link do tema. Se o WhatsApp precisar aparecer em outro lugar (botão flutuante, 404), lembre que a 404 é do plugin: o número entra em `templates/404.php`, e não no Elementor.
+
 ### 3.4 SVGs otimizados
 
 O Elementor **embute no HTML** o conteúdo dos SVGs enviados em widgets de ícone (lido do meta `_elementor_inline_svg`). Os SVGs exportados com textura vinham com milhares de curvas e coordenadas de 8 casas decimais (~210 KB por ícone), e a página inicial chegava a 2,7 MB de HTML.
