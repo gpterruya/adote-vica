@@ -281,18 +281,20 @@ Regras do `style.css` que dependem disso:
 
 #### Telefones de contato
 
-| Número | Tipo | Onde aparece |
-|---|---|---|
-| (11) 3885-0749 | Fixo | Rodapé, botão flutuante de telefone (template `532`, widget `4f540891`, `tel:+551138850749`), card "Custos da Castração" (`162c6de`) e página 404 do plugin (`templates/404.php`) |
-| (11) 95808-3658 | WhatsApp | **Só no rodapé**, abaixo do fixo, com link `https://wa.me/5511958083658` (abre em nova aba) |
+O site tem um único telefone, o fixo **(11) 3885-0749**. Ele aparece em:
+
+- rodapé;
+- botão flutuante de telefone (template `532`, widget `4f540891`, `tel:+551138850749`);
+- card "Custos da Castração" (`162c6de`);
+- página 404 do plugin (`templates/404.php`). Ela não é editada no Elementor: um número novo ou trocado entra no código do plugin.
 
 O rodapé faz parte da própria página inicial (seção `4451bd9`), não é um template global, e existe uma única versão para todos os aparelhos. O texto fica no campo **Descrição** do widget Caixa de imagem `b119f04` ("Centro de Adoção Responsável"), em HTML:
 
 ```html
-<b>Endereço:</b> R. Pamplona, 1481 - Jardins, São Paulo - SP, 01405-003<br><b>Telefone:</b> (11) 3885-0749<br><b>WhatsApp:</b> <a href="https://wa.me/5511958083658" target="_blank" rel="noopener" style="color: inherit;">(11) 95808-3658</a>
+<b>Endereço:</b> R. Pamplona, 1481 - Jardins, São Paulo - SP, 01405-003<br><b>Telefone:</b> (11) 3885-0749
 ```
 
-O `style="color: inherit;"` deixa o link no mesmo cinza do texto; sem ele o link fica rosa, que é a cor padrão de link do tema. Se o WhatsApp precisar aparecer em outro lugar (botão flutuante, 404), lembre que a 404 é do plugin: o número entra em `templates/404.php`, e não no Elementor.
+Em novembro de 2026 um WhatsApp ((11) 95808-3658) entrou no rodapé e foi removido dias depois. Se um link voltar a ser colocado ali, use `style="color: inherit;"` no `<a>`: sem isso, o link fica rosa, que é a cor padrão de link do tema.
 
 ### 3.4 SVGs otimizados
 
