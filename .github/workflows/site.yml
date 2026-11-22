@@ -1,6 +1,10 @@
-# Site estático (pasta site/): gera, verifica e tira capturas de tela a cada
-# push e pull request. A publicação em si é feita pelo Cloudflare Pages,
-# conectado a este repositório (ver README, seção "Site estático").
+# Site estático (pasta site/): gera, verifica, tira capturas de tela e
+# publica no Firebase Hosting (Google Cloud).
+#   pull request → prévia em um endereço temporário (comentado no PR)
+#   push na main → site oficial (adotevica.com.br)
+# A publicação só acontece se todas as verificações passarem e se o
+# segredo FIREBASE_SERVICE_ACCOUNT e a variável FIREBASE_PROJECT_ID
+# estiverem configurados no repositório (README, seção 7.5).
 name: Site
 
 on:
@@ -12,14 +16,18 @@ on:
 
 permissions:
   contents: read
+  pull-requests: write # comentário com o endereço da prévia
+  checks: write
 
 concurrency:
   group: site-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  verificar:
+  site:
     runs-on: ubuntu-latest
+    env:
+      PUBLICAR: ${{ secrets.FIREBASE_SERVICE_ACCOUNT != '' && vars.FIREBASE_PROJECT_ID != '' }}
     defaults:
       run:
         working-directory: site
@@ -57,3 +65,23 @@ jobs:
           name: capturas
           path: site/capturas/
           retention-days: 14
+
+      - name: Publicar prévia (pull request)
+        if: github.event_name == 'pull_request' && env.PUBLICAR == 'true' && github.event.pull_request.head.repo.full_name == github.repository
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+          projectId: ${{ vars.FIREBASE_PROJECT_ID }}
+          entryPoint: site
+          expires: 7d
+
+      - name: Publicar o site oficial (main)
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main' && env.PUBLICAR == 'true'
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+          projectId: ${{ vars.FIREBASE_PROJECT_ID }}
+          entryPoint: site
+          channelId: live
