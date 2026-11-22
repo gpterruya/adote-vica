@@ -2,9 +2,13 @@
 # publica no Firebase Hosting (Google Cloud).
 #   pull request → prévia em um endereço temporário (comentado no PR)
 #   push na main → site oficial (adotevica.com.br)
-# A publicação só acontece se todas as verificações passarem e se o
-# segredo FIREBASE_SERVICE_ACCOUNT e a variável FIREBASE_PROJECT_ID
-# estiverem configurados no repositório (README, seção 7.5).
+# A publicação só acontece se todas as verificações passarem e se as
+# variáveis FIREBASE_PROJECT_ID, GCP_WIF_PROVIDER e GCP_SERVICE_ACCOUNT
+# estiverem configuradas no repositório (README, seção 7.5).
+#
+# Autenticação sem chave (Workload Identity Federation): o GitHub prova ao
+# Google, a cada execução, que é este repositório, e recebe um acesso
+# temporário à conta de serviço. Não há chave JSON nem segredo guardado.
 name: Site
 
 on:
@@ -17,7 +21,7 @@ on:
 permissions:
   contents: read
   pull-requests: write # comentário com o endereço da prévia
-  checks: write
+  id-token: write # token OIDC para a Workload Identity Federation do Google
 
 concurrency:
   group: site-${{ github.ref }}
@@ -27,7 +31,8 @@ jobs:
   site:
     runs-on: ubuntu-latest
     env:
-      PUBLICAR: ${{ secrets.FIREBASE_SERVICE_ACCOUNT != '' && vars.FIREBASE_PROJECT_ID != '' }}
+      PUBLICAR: ${{ vars.FIREBASE_PROJECT_ID != '' && vars.GCP_WIF_PROVIDER != '' && vars.GCP_SERVICE_ACCOUNT != '' }}
+      FIREBASE_PROJECT_ID: ${{ vars.FIREBASE_PROJECT_ID }}
     defaults:
       run:
         working-directory: site
@@ -66,22 +71,30 @@ jobs:
           path: site/capturas/
           retention-days: 14
 
-      - name: Publicar prévia (pull request)
-        if: github.event_name == 'pull_request' && env.PUBLICAR == 'true' && github.event.pull_request.head.repo.full_name == github.repository
-        uses: FirebaseExtended/action-hosting-deploy@v0
+      # Pull requests vindos de forks não publicam (não recebem o token OIDC).
+      - name: Autenticar no Google Cloud (sem chave)
+        id: google
+        if: env.PUBLICAR == 'true' && (github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository)
+        uses: google-github-actions/auth@v3
         with:
-          repoToken: ${{ secrets.GITHUB_TOKEN }}
-          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
-          projectId: ${{ vars.FIREBASE_PROJECT_ID }}
-          entryPoint: site
-          expires: 7d
+          project_id: ${{ vars.FIREBASE_PROJECT_ID }}
+          workload_identity_provider: ${{ vars.GCP_WIF_PROVIDER }}
+          service_account: ${{ vars.GCP_SERVICE_ACCOUNT }}
+
+      - name: Publicar prévia (pull request)
+        if: steps.google.outcome == 'success' && github.event_name == 'pull_request'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR: ${{ github.event.pull_request.number }}
+          SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          npx --yes firebase-tools@15.34.2 hosting:channel:deploy "pr-$PR" --expires 7d \
+            --project "$FIREBASE_PROJECT_ID" --json > previa.json
+          url=$(node -e "const r=require('./previa.json').result; console.log(Object.values(r)[0].url)")
+          echo "Prévia: $url" >> "$GITHUB_STEP_SUMMARY"
+          gh pr comment "$PR" --edit-last --create-if-none --body \
+            "Prévia do site (válida por 7 dias): $url — commit ${SHA::7}"
 
       - name: Publicar o site oficial (main)
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main' && env.PUBLICAR == 'true'
-        uses: FirebaseExtended/action-hosting-deploy@v0
-        with:
-          repoToken: ${{ secrets.GITHUB_TOKEN }}
-          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
-          projectId: ${{ vars.FIREBASE_PROJECT_ID }}
-          entryPoint: site
-          channelId: live
+        if: steps.google.outcome == 'success' && github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: npx --yes firebase-tools@15.34.2 deploy --only hosting --project "$FIREBASE_PROJECT_ID" --non-interactive
