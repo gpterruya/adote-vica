@@ -530,7 +530,7 @@ A cada push na `main` e a cada pull request que mexa em `site/`, o GitHub roda `
    - **pull request:** uma prévia num endereço temporário (válido por 7 dias), que o GitHub comenta no próprio pull request;
    - **push na `main`:** o site oficial.
 
-   Enquanto o Firebase não estiver configurado (seção 7.5), este passo é pulado e só as verificações rodam.
+   A autenticação no Google Cloud é sem chave (Workload Identity Federation, seção 7.5 B). Enquanto as variáveis `FIREBASE_PROJECT_ID`, `GCP_WIF_PROVIDER` e `GCP_SERVICE_ACCOUNT` não existirem no repositório, este passo é pulado e só as verificações rodam.
 
 Localmente, as capturas precisam de bibliotecas do sistema que pedem senha de administrador, uma vez só: `sudo npx playwright install-deps chromium` dentro de `site/`. Depois: `npm run preview` em um terminal e `node scripts/capturas.mjs` em outro.
 
@@ -547,22 +547,58 @@ Feitos uma vez:
 3. Anote o **ID do projeto**, que aparece abaixo do nome (por exemplo, `adote-vica-1a2b3`).
 4. No menu **Hosting** → **Vamos começar** → avance as telas sem rodar os comandos: a publicação é feita pelo GitHub.
 
-**B. Dar ao GitHub permissão para publicar**
+**B. Dar ao GitHub permissão para publicar (sem chave)**
 
-1. No [Google Cloud Console](https://console.cloud.google.com), com o mesmo projeto selecionado: **IAM e administrador** → **Contas de serviço** → **Criar conta de serviço**, com o nome `github-deploy`.
-2. Papéis:
-   - **Administrador do Firebase Hosting**
-   - **Leitor de chaves de API**
-   - **Usuário da conta de serviço**
-   - **Leitor do Cloud Run**
-3. Na conta criada → **Chaves** → **Adicionar chave** → **JSON**. O arquivo baixado dá acesso de publicação ao site: não o envie a ninguém, não o coloque no repositório e apague-o depois do passo seguinte.
-4. No GitHub, em **Settings** → **Secrets and variables** → **Actions**:
-   - aba **Secrets** → **New repository secret**: nome `FIREBASE_SERVICE_ACCOUNT`, valor = todo o conteúdo do arquivo JSON;
-   - aba **Variables** → **New repository variable**: nome `FIREBASE_PROJECT_ID`, valor = o ID do projeto (passo A.3).
+O GitHub não usa chave de conta de serviço. Organizações novas no Google Cloud bloqueiam a criação de chaves (política `iam.disableServiceAccountKeyCreation`), e é melhor que continue assim. Em vez de chave, o site usa **Workload Identity Federation**: a cada execução, o GitHub prova ao Google que é o repositório `gpterruya/adote-vica` e recebe um acesso temporário à conta de serviço `github-deploy`. Não há chave para vazar nem segredo guardado no GitHub.
+
+1. No [Google Cloud Console](https://console.cloud.google.com), com o projeto do passo A selecionado, abra o **Cloud Shell**: o ícone `>_` no canto superior direito. É um terminal no navegador, já autenticado na sua conta.
+2. Cole o bloco abaixo, trocando só o ID do projeto na primeira linha. Ele pode ser rodado de novo sem problema: o que já existir é mantido.
+
+   ```bash
+   PROJETO=adote-vica-1a2b3            # ← o ID do projeto (passo A.3)
+   REPO=gpterruya/adote-vica
+   NUMERO=$(gcloud projects describe "$PROJETO" --format='value(projectNumber)')
+   CONTA="github-deploy@$PROJETO.iam.gserviceaccount.com"
+
+   gcloud services enable iamcredentials.googleapis.com sts.googleapis.com \
+     firebasehosting.googleapis.com --project "$PROJETO"
+
+   # conta de serviço que publica o site, com só os papéis necessários
+   gcloud iam service-accounts create github-deploy --project "$PROJETO" \
+     --display-name "GitHub: publica o site" 2>/dev/null || true
+   for PAPEL in roles/firebasehosting.admin roles/serviceusage.apiKeysViewer \
+                roles/run.viewer roles/serviceusage.serviceUsageConsumer; do
+     gcloud projects add-iam-policy-binding "$PROJETO" --condition=None \
+       --member "serviceAccount:$CONTA" --role "$PAPEL" >/dev/null
+   done
+
+   # "pool" de identidades do GitHub, aceitando só este repositório
+   gcloud iam workload-identity-pools create github --project "$PROJETO" \
+     --location global --display-name "GitHub" 2>/dev/null || true
+   gcloud iam workload-identity-pools providers create-oidc adote-vica \
+     --project "$PROJETO" --location global --workload-identity-pool github \
+     --display-name "adote-vica" \
+     --issuer-uri "https://token.actions.githubusercontent.com" \
+     --attribute-mapping "google.subject=assertion.sub,attribute.repository=assertion.repository" \
+     --attribute-condition "assertion.repository == '$REPO'" 2>/dev/null || true
+
+   # o repositório pode agir como a conta de serviço
+   gcloud iam service-accounts add-iam-policy-binding "$CONTA" --project "$PROJETO" \
+     --role roles/iam.workloadIdentityUser \
+     --member "principalSet://iam.googleapis.com/projects/$NUMERO/locations/global/workloadIdentityPools/github/attribute.repository/$REPO" >/dev/null
+
+   echo "FIREBASE_PROJECT_ID = $PROJETO"
+   echo "GCP_SERVICE_ACCOUNT = $CONTA"
+   echo "GCP_WIF_PROVIDER    = projects/$NUMERO/locations/global/workloadIdentityPools/github/providers/adote-vica"
+   ```
+
+3. No GitHub, em **Settings** → **Secrets and variables** → **Actions** → aba **Variables** → **New repository variable**, crie as três variáveis com os valores impressos no fim do bloco: `FIREBASE_PROJECT_ID`, `GCP_SERVICE_ACCOUNT` e `GCP_WIF_PROVIDER`. São identificadores, não senhas: sozinhos não dão acesso a nada. Por isso ficam em *Variables*, não em *Secrets*.
+
+Se você chegou a criar a conta `github-deploy` pelo console antes, o bloco aproveita a conta existente. Nenhuma chave foi criada, porque a política bloqueou.
 
 **C. Conferir e publicar**
 
-1. No pull request aberto, rode as verificações de novo (**Actions** → execução → **Re-run all jobs**). O GitHub comenta no pull request um endereço de prévia (`…--pr1-….web.app`).
+1. Abra um pull request que mexa em `site/`, ou rode de novo as verificações de um pull request aberto (**Actions** → execução → **Re-run all jobs**). O GitHub comenta no pull request um endereço de prévia (`…--pr-N-….web.app`).
 2. Confira a prévia em celular, tablet e computador.
 3. Junte o pull request na `main`. O site oficial vai para `https://<ID-do-projeto>.web.app`, ainda sem o domínio.
 
