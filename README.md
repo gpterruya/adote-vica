@@ -463,8 +463,8 @@ site/
 ├── public/                       ← arquivos copiados como estão
 │   ├── img/                      ← imagens (as mesmas dos uploads do WordPress)
 │   ├── fonts/                    ← TT Hazelnuts e Intro Script
-│   ├── _headers, _redirects      ← cache e redirecionamentos do Cloudflare Pages
 │   └── robots.txt
+├── firebase.json                 ← Firebase Hosting: cache, redirecionamentos, cabeçalhos
 └── scripts/
     ├── verificar.mjs             ← regras que bloqueiam a publicação (7.4)
     ├── capturas.mjs              ← capturas de tela em 6 tamanhos de tela
@@ -526,28 +526,61 @@ A cada push na `main` e a cada pull request que mexa em `site/`, o GitHub roda `
    - link de telefone `(11) 3885-0749` ausente;
    - imagem sem `alt`, link interno quebrado ou âncora (`#contato`, `#compromissos`) inexistente.
 3. **Tira capturas de tela** da página inteira em celular (375 e 740 deitado), tablet (768 e 1024 deitado), notebook (1366) e computador (1440), e falha se aparecer **rolagem horizontal** em algum deles. As capturas ficam para download por 14 dias na execução (aba *Actions* → execução → *Artifacts* → `capturas`).
+4. **Publica no Firebase Hosting**, só se os passos anteriores passarem:
+   - **pull request:** uma prévia num endereço temporário (válido por 7 dias), que o GitHub comenta no próprio pull request;
+   - **push na `main`:** o site oficial.
+
+   Enquanto o Firebase não estiver configurado (seção 7.5), este passo é pulado e só as verificações rodam.
 
 Localmente, as capturas precisam de bibliotecas do sistema que pedem senha de administrador, uma vez só: `sudo npx playwright install-deps chromium` dentro de `site/`. Depois: `npm run preview` em um terminal e `node scripts/capturas.mjs` em outro.
 
-### 7.5 Colocar no ar (Cloudflare Pages) — passos pendentes
+### 7.5 Colocar no ar (Firebase Hosting, Google Cloud) — passos pendentes
 
-Feitos uma vez, no painel da Cloudflare (a conta do DNS):
+O site é hospedado no **Firebase Hosting**, o serviço de sites estáticos do Google Cloud. Todo projeto Firebase é um projeto do Google Cloud, aparece no mesmo console e na mesma conta de cobrança. O plano gratuito (Spark) comporta este site: 10 GB de armazenamento e 360 MB de transferência por dia. O HTTPS do domínio é emitido automaticamente.
 
-1. **Workers & Pages** → **Create** → **Pages** → **Connect to Git** → autorizar o GitHub e escolher este repositório.
-2. Configuração do build:
-   - **Production branch:** `main`
-   - **Framework preset:** Astro
-   - **Root directory:** `site`
-   - **Build command:** `npm run build && npm run check`
-   - **Build output directory:** `dist`
-   - Variável de ambiente `NODE_VERSION` = `22`
-3. Salvar. O primeiro build publica em um endereço `*.pages.dev`. Cada pull request ganha um endereço de prévia próprio.
-4. Conferir a versão `*.pages.dev` em celular, tablet e computador.
-5. **Trocar o domínio:** no projeto do Pages → **Custom domains** → adicionar `adotevica.com.br` e `www.adotevica.com.br`. A Cloudflare troca os registros DNS (que hoje apontam para a Hostinger). Isso é o que coloca o site novo no ar; para voltar atrás, basta remover o domínio do Pages e restaurar os registros antigos.
-6. No **Google Search Console**: nada muda (mesmo domínio, mesma verificação por meta tag e o mesmo `sitemap_index.xml`). Pedir a indexação da página inicial depois da troca.
-7. Manter a Hostinger e o WordPress parados por algumas semanas como reserva antes de cancelar.
+Feitos uma vez:
 
-Depois da troca, publicar é só fazer push na `main`: o Cloudflare gera e publica em cerca de 1 minuto. Se `npm run check` falhar, o Cloudflare não publica e o site continua na versão anterior. Para desfazer uma publicação: painel do Pages → **Deployments** → versão anterior → **Rollback**.
+**A. Criar o projeto**
+
+1. Em [console.firebase.google.com](https://console.firebase.google.com) → **Criar um projeto**. Pode ser um projeto novo ou um projeto do Google Cloud que já exista.
+2. Desligue o Google Analytics: o site já usa o Tag Manager.
+3. Anote o **ID do projeto**, que aparece abaixo do nome (por exemplo, `adote-vica-1a2b3`).
+4. No menu **Hosting** → **Vamos começar** → avance as telas sem rodar os comandos: a publicação é feita pelo GitHub.
+
+**B. Dar ao GitHub permissão para publicar**
+
+1. No [Google Cloud Console](https://console.cloud.google.com), com o mesmo projeto selecionado: **IAM e administrador** → **Contas de serviço** → **Criar conta de serviço**, com o nome `github-deploy`.
+2. Papéis:
+   - **Administrador do Firebase Hosting**
+   - **Leitor de chaves de API**
+   - **Usuário da conta de serviço**
+   - **Leitor do Cloud Run**
+3. Na conta criada → **Chaves** → **Adicionar chave** → **JSON**. O arquivo baixado dá acesso de publicação ao site: não o envie a ninguém, não o coloque no repositório e apague-o depois do passo seguinte.
+4. No GitHub, em **Settings** → **Secrets and variables** → **Actions**:
+   - aba **Secrets** → **New repository secret**: nome `FIREBASE_SERVICE_ACCOUNT`, valor = todo o conteúdo do arquivo JSON;
+   - aba **Variables** → **New repository variable**: nome `FIREBASE_PROJECT_ID`, valor = o ID do projeto (passo A.3).
+
+**C. Conferir e publicar**
+
+1. No pull request aberto, rode as verificações de novo (**Actions** → execução → **Re-run all jobs**). O GitHub comenta no pull request um endereço de prévia (`…--pr1-….web.app`).
+2. Confira a prévia em celular, tablet e computador.
+3. Junte o pull request na `main`. O site oficial vai para `https://<ID-do-projeto>.web.app`, ainda sem o domínio.
+
+**D. Trocar o domínio** (é isto que coloca o site novo no ar)
+
+1. No Firebase: **Hosting** → **Adicionar domínio personalizado** → `adotevica.com.br`. Depois `www.adotevica.com.br`, marcando para **redirecionar** para `adotevica.com.br`.
+2. O Firebase mostra os registros DNS necessários (um **TXT** de verificação e registros **A**). Cadastre-os no **DNS da Cloudflare**:
+   - nos registros do Firebase, com o proxy **desligado** (nuvem cinza, "DNS only"). Com a nuvem laranja, o Firebase não consegue emitir o certificado HTTPS;
+   - os registros **A** do Firebase **substituem** os que hoje apontam para a Hostinger (`adotevica.com.br` e `www`);
+   - **não mexa** em registros de e-mail (**MX**, SPF/DKIM em **TXT**) nem na verificação do Search Console.
+3. O certificado HTTPS leva de alguns minutos a algumas horas. Enquanto isso, o domínio pode mostrar aviso de certificado.
+4. **Para voltar atrás:** restaure na Cloudflare os registros A antigos (os da Hostinger). Anote-os antes de trocar.
+5. **Google Search Console:** nada muda (mesmo domínio, mesma verificação por meta tag, mesmo `sitemap_index.xml`). Peça a indexação da página inicial depois da troca.
+6. Mantenha a Hostinger e o WordPress parados por algumas semanas, como reserva, antes de cancelar.
+
+Depois disso, publicar é só fazer push na `main`: o GitHub gera, verifica e publica em poucos minutos. Se alguma verificação falhar, nada é publicado e o site continua na versão anterior.
+
+**Para desfazer uma publicação:** Firebase → **Hosting** → **Histórico de versões** → versão anterior → **Reverter**.
 
 ### 7.6 O que muda em relação ao WordPress
 
