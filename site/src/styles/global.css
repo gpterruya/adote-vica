@@ -1,0 +1,234 @@
+/* =========================================================
+   Adote Vi.Ca — estilos globais
+   Breakpoints (os mesmos do site antigo no Elementor):
+     celular  ≤ 767px
+     tablet   768–1024px
+     desktop  ≥ 1025px
+   ========================================================= */
+
+@font-face {
+	font-family: "TT Hazelnuts";
+	src: url("/fonts/TTHazelnuts-Medium-Trial-BF6401510beb891.ttf") format("truetype");
+	font-weight: 100 600;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: "TT Hazelnuts";
+	src: url("/fonts/TTHazelnuts-Bold-Trial-BF6401510d9e770.ttf") format("truetype");
+	font-weight: 700 900;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: "Intro Script";
+	src: url("/fonts/IntroScript-Medium.ttf") format("truetype");
+	font-weight: 400;
+	font-display: swap;
+}
+
+:root {
+	--azul: #547193;
+	--cinza: #4d4d4d;
+	--cinza-suave: rgb(77 77 77 / 65%);
+	--texto: #7a7a7a;
+	--laranja: #f15a24;
+	--bege: #f9f2e4;
+	--branco: #ffffff;
+
+	--fonte: "TT Hazelnuts", sans-serif;
+	--fonte-script: "Intro Script", cursive;
+
+	/* largura do conteúdo (igual ao "boxed" do Elementor) */
+	--conteudo: 1140px;
+	/* cartões largos com fundo ilustrado */
+	--cartao-largo: 1400px;
+
+	/* palavra cursiva dos títulos das seções */
+	--script-titulo: 64px;
+	--script-titulo-44: 64px;
+}
+
+/* No site antigo a palavra cursiva diminuía já em 768px (iPad em pé),
+   e não só a partir de 767px como o resto do layout. */
+@media (max-width: 768px) {
+	:root {
+		--script-titulo: 42px;
+		--script-titulo-44: 44px;
+	}
+}
+
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+html {
+	-webkit-text-size-adjust: 100%;
+	scroll-behavior: smooth;
+}
+
+body {
+	margin: 0;
+	background: var(--branco);
+	color: var(--texto);
+	font-family: var(--fonte);
+	font-weight: 500;
+	font-size: 16px;
+	line-height: 1.5;
+	overflow-x: clip;
+}
+
+h1,
+h2,
+h3 {
+	margin: 0;
+	font-weight: 500;
+	line-height: 1;
+	color: var(--cinza);
+}
+
+p {
+	margin: 0 0 0.9rem;
+}
+
+ul {
+	margin: 0;
+	padding-left: 40px;
+}
+
+img {
+	display: inline-block;
+	max-width: 100%;
+	height: auto;
+	vertical-align: middle;
+	border: 0;
+}
+
+a {
+	color: #c36;
+}
+
+strong,
+b {
+	font-weight: 700;
+}
+
+/* Palavra em letra cursiva dentro dos títulos ("diferenciais", "adotar?"…) */
+.script {
+	font-family: var(--fonte-script);
+	font-weight: 400;
+	color: var(--azul);
+}
+
+/* Faixa de conteúdo centralizada: até 1140px, com respiro lateral
+   mínimo de 10px (20px no celular). */
+.wrap {
+	--respiro: 10px;
+	width: min(var(--conteudo), 100% - 2 * var(--respiro));
+	margin-inline: auto;
+}
+
+@media (max-width: 767px) {
+	.wrap {
+		--respiro: 20px;
+	}
+}
+
+/* Traço ondulado azul que aparece abaixo dos títulos. Ocupa 24px de
+   altura (3px de traço + respiro), como o widget de ícone do Elementor;
+   os componentes só ajustam o margin-top. */
+.sublinhado {
+	display: block;
+	height: 3px;
+	width: auto;
+	margin: 15px 0 6px;
+}
+
+/* Botão laranja cheio */
+.botao {
+	display: inline-block;
+	padding: 24px;
+	border-radius: 45px;
+	background: var(--laranja);
+	color: var(--bege);
+	font-family: var(--fonte);
+	font-weight: 700;
+	font-size: 20px;
+	line-height: 1;
+	text-align: center;
+	text-decoration: none;
+	transition: filter 0.2s;
+}
+
+.botao:hover,
+.botao:focus-visible {
+	filter: brightness(0.92);
+}
+
+/* Botão com contorno laranja ("ver matéria") */
+.botao-contorno {
+	display: inline-block;
+	padding: 12px 24px;
+	border: 2px solid var(--laranja);
+	border-radius: 31px;
+	background: transparent;
+	color: var(--laranja);
+	font-weight: 700;
+	font-size: 16px;
+	line-height: 1;
+	text-decoration: none;
+	transition: background-color 0.3s, color 0.3s;
+}
+
+.botao-contorno:hover,
+.botao-contorno:focus-visible {
+	background: var(--laranja);
+	color: var(--branco);
+}
+
+/* Lista com ícone antes do título ("Custos de estrutura", "O que fazemos"…) */
+.titulo-icone {
+	display: flex;
+	align-items: center;
+	gap: 12.5px;
+	margin: 0;
+	color: #54595f;
+	font-weight: 700;
+	font-size: 22px;
+	line-height: 1.5;
+}
+
+.titulo-icone img {
+	width: 30px;
+	height: 30px;
+	object-fit: contain;
+	flex: none;
+}
+
+/* Ícone quadrado de um "icon box" (tamanho definido em cada seção) */
+.icone {
+	display: block;
+	flex: none;
+	object-fit: contain;
+}
+
+@media (max-width: 767px) {
+	.titulo-icone {
+		font-size: 20px;
+	}
+
+	.botao {
+		font-size: 16px;
+	}
+}
+
+.visualmente-oculto {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+	clip: rect(0 0 0 0);
+	white-space: nowrap;
+}

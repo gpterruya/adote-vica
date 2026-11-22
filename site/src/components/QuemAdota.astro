@@ -1,0 +1,231 @@
+---
+// "Quem adota muda vidas". No Elementor esta seção existia duas vezes
+// (desktop 7bc55a9 e tablet/celular d79ca14); aqui é uma só, e o CSS
+// reorganiza a ordem dos blocos em cada tamanho de tela.
+---
+
+<section class="quem" data-ref="7bc55a9">
+	<div class="wrap quem__grade">
+		<div class="quem__foto" data-ref="bc2d6b4">
+			<img src="/img/Group-22.webp" alt="Equipe do Vi.Ca com cães adotados" width="559" height="431" loading="lazy" />
+		</div>
+
+		<div class="quem__texto" data-ref="571467a">
+			<h2 class="quem__titulo" data-ref="7445820">Quem adota muda vidas</h2>
+			<p class="quem__lead" data-ref="d00d9b0">
+				<b>Nascidos de uma petshop “convencional”, encontramos na adoção o nosso propósito.</b>
+			</p>
+			<p class="quem__paragrafo" data-ref="e55b2c6">
+				O Vi.Ca é hoje o maior Centro de Reabilitação e Adoção do país. Nosso papel é preparar cães e gatos resgatados por ONGs,
+				protetores e canis parceiros para encontrarem lares seguros e saudáveis. Com um gatil para 60 animais e um canil com 30 baias,
+				realizamos cerca de 300 adoções por mês.
+			</p>
+		</div>
+
+		<div class="quem__missao" data-ref="2f30f06">
+			<p data-ref="b4f7f97">
+				Em nossa visão, um mundo sustentável e com mais qualidade de vida depende, entre tantas outras questões, da redução do número
+				de animais abandonados. O Vi.Ca tem como missão criar condições para que ocorram cada vez mais adoções e já realizou mais de 20
+				mil adoções desde 2017. Para que este número continue subindo, o ViCa tem trabalhado de maneira concreta, efetiva e baseada em
+				dois pilares: Adote Vi.Ca e o Clube Vi.Ca.
+			</p>
+			<img
+				class="quem__missao-foto"
+				src="/img/Group-83.webp"
+				alt=""
+				width="555"
+				height="467"
+				loading="lazy"
+				data-ref="fbdbc3f"
+			/>
+		</div>
+	</div>
+</section>
+
+<style>
+	.quem {
+		background: var(--branco);
+		padding-block: 10px;
+		/* a foto decorativa do bloco azul passa da borda direita entre
+		   ~1025 e ~1200px; corta sem criar rolagem horizontal */
+		overflow-x: clip;
+	}
+
+	/* ---------- Desktop (≥ 1025px) ---------- */
+	.quem__grade {
+		display: flex;
+		flex-wrap: wrap;
+		min-height: 938px; /* 958px − 20px de respiro */
+	}
+
+	.quem__foto,
+	.quem__texto {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		width: 50%;
+		padding: 10px;
+	}
+
+	.quem__foto {
+		align-items: center;
+	}
+
+	.quem__texto {
+		gap: 20px;
+		padding-left: 40px;
+		padding-right: 0;
+	}
+
+	.quem__titulo {
+		font-size: 44px;
+	}
+
+	.quem__lead {
+		width: 86%;
+		font-size: 22px;
+		color: var(--azul);
+	}
+
+	.quem__paragrafo {
+		margin-top: -6px;
+		font-size: 18px;
+	}
+
+	.quem__missao {
+		position: relative;
+		display: flex;
+		align-items: center;
+		width: 100%;
+		margin-top: -37px;
+		padding: 1px 41px 0 51px;
+		border-radius: 24px;
+		background: var(--azul);
+	}
+
+	.quem__missao p {
+		width: 51%;
+		font-size: 18px;
+		color: var(--bege);
+	}
+
+	.quem__missao-foto {
+		position: absolute;
+		top: -7%;
+		right: -5%;
+		width: 555px;
+		max-width: none;
+	}
+
+	/* ---------- Tablet e celular (≤ 1024px) ----------
+	   Ordem: título, subtítulo, foto, parágrafo e o bloco azul. O bloco
+	   de texto "se desfaz" (display: contents) para a foto entrar entre
+	   o subtítulo e o parágrafo. */
+	@media (max-width: 1024px) {
+		.quem__grade {
+			flex-direction: column;
+			flex-wrap: nowrap;
+			justify-content: center;
+			min-height: 1050px; /* 1070px − respiro */
+		}
+
+		.quem__texto {
+			display: contents;
+		}
+
+		.quem__titulo,
+		.quem__lead,
+		.quem__foto,
+		.quem__paragrafo {
+			margin-left: 40px;
+		}
+
+		.quem__titulo {
+			order: 1;
+		}
+
+		/* larguras relativas à coluna de texto (que tinha 40px de recuo) */
+		.quem__lead {
+			order: 2;
+			width: calc((100% - 40px) * 0.86);
+			margin-top: 20px;
+		}
+
+		.quem__foto {
+			order: 3;
+			width: calc((100% - 40px) / 2);
+			margin-top: 20px;
+		}
+
+		.quem__paragrafo {
+			order: 4;
+			margin-top: 20px;
+		}
+
+		.quem__missao {
+			order: 5;
+			flex-direction: column;
+			margin-top: 0;
+		}
+
+		.quem__missao p {
+			width: 100%;
+		}
+
+		.quem__missao-foto {
+			position: static;
+			width: auto;
+			max-width: 100%;
+		}
+	}
+
+	@media (max-width: 767px) {
+		.quem {
+			padding: 48px 0 86px;
+		}
+
+		.quem__grade {
+			min-height: 0;
+			text-align: center;
+		}
+
+		.quem__titulo,
+		.quem__lead,
+		.quem__foto,
+		.quem__paragrafo {
+			width: auto;
+			margin-inline: 20px;
+		}
+
+		.quem__titulo {
+			font-size: 32px;
+		}
+
+		.quem__lead {
+			margin-top: 6px;
+			font-size: 16px;
+		}
+
+		.quem__paragrafo {
+			font-size: 16px;
+		}
+
+		.quem__missao {
+			flex-direction: column-reverse;
+			align-items: stretch;
+			gap: 20px;
+			margin-top: 64px;
+			padding: 0 20px 64px;
+		}
+
+		.quem__missao p {
+			margin-bottom: 0.9rem;
+			font-size: 16px;
+		}
+
+		.quem__missao-foto {
+			width: calc(100% - 20px);
+			margin: -25px 0 0 20px;
+		}
+	}
+</style>

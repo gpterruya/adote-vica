@@ -1,0 +1,246 @@
+---
+// "Custos e transparência".
+// ⚠️ Jurídico: nenhum valor (R$) de serviço pode aparecer no site, nem
+// oculto. A castração só informa o telefone. Ver README.
+import { site } from '../data/site';
+---
+
+<section class="custos" data-ref="b656212">
+	<div class="wrap custos__grade">
+		<div class="custos__titulo-bloco" data-ref="644343e">
+			<h2 class="custos__titulo" data-ref="367b69d"><span class="script">Custos</span><br /> e transparência</h2>
+		</div>
+
+		<div class="custos__intro" data-ref="52a7e70">
+			<img class="sublinhado" src="/img/sublinhado.svg" alt="" width="203" height="3" />
+			<p data-ref="f29a4e2">
+				Cada animal passa por protocolos veterinários antes da adoção. Nosso compromisso é reduzir riscos com padronização e
+				acompanhamento clínico constante.
+			</p>
+		</div>
+
+		<div class="custos__cartao custos__cartao--diretos" data-ref="6da732b">
+			<h3 class="titulo-icone custos__cartao-titulo" data-ref="d6c021e">
+				<img src="/img/icones/triangulo.svg" alt="" width="30" height="30" />
+				Custos Diretos – Responsabilidade do Tutor
+			</h3>
+			<div class="custos__lista" data-ref="162c6de">
+				<p><strong>Taxa de Adoção</strong></p>
+				<ul>
+					<li>Vacinação (carteira de vacinação)</li>
+					<li>Vermifugação (antipulgas)</li>
+					<li>Testes rápidos de doenças infecciosas: cinomose e parvovirose (em caso de gatos Fiv Felv)</li>
+					<li>Hemograma + bioquímico</li>
+					<li>Identificação e documentação individual</li>
+					<li>Uma consulta com médico(a) veterinário(a)</li>
+				</ul>
+				<p><strong>Custos da Castração</strong></p>
+				<p>Entre em contato conosco para informações sobre valores: {site.telefone.exibicao}.</p>
+			</div>
+		</div>
+
+		<div class="custos__cartao custos__cartao--estrutura" data-ref="6a8586a">
+			<h3 class="titulo-icone custos__cartao-titulo" data-ref="307971b">
+				<img src="/img/icones/triangulo.svg" alt="" width="30" height="30" />
+				Custos de estrutura
+			</h3>
+			<div class="custos__lista" data-ref="9514f40">
+				<ul>
+					<li>Higienização e alimentação diária.</li>
+					<li>Equipe veterinária e cuidadores.</li>
+					<li>Medicamentos e insumos clínicos.</li>
+					<li>Reserva para novos resgates.</li>
+					<li>Aluguel, telefone, internet, IPTU, impostos, etc)</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</section>
+
+<style>
+	.custos {
+		margin-block: 40px;
+		padding-block: 10px;
+	}
+
+	.custos__grade {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+		column-gap: 20px;
+		min-height: 574px; /* 594px − respiro */
+	}
+
+	.custos__titulo-bloco,
+	.custos__intro,
+	.custos__cartao {
+		display: flex;
+		flex-direction: column;
+		width: 47%;
+	}
+
+	.custos__titulo-bloco,
+	.custos__intro {
+		justify-content: center;
+		gap: 20px;
+		padding: 10px;
+	}
+
+	.custos__titulo {
+		width: 77%;
+		margin-top: 18px;
+		font-size: 44px;
+	}
+
+	.custos__titulo .script {
+		font-size: var(--script-titulo);
+	}
+
+	.custos__intro p {
+		width: 76%;
+		margin-top: -14px;
+		font-size: 18px;
+		color: var(--cinza);
+	}
+
+	/* Cartões: o SVG de fundo traz o retângulo bege + a ilustração no canto
+	   superior direito. Ele fica na largura do cartão, ancorado no topo, e o
+	   resto é completado com o mesmo bege, seja qual for a altura do texto. */
+	.custos__cartao {
+		gap: 20px;
+		padding: 32px;
+		border-radius: 11px;
+		background-color: var(--bege);
+		background-size: 100% auto;
+		background-position: 50% 0;
+		background-repeat: no-repeat;
+	}
+
+	.custos__cartao--diretos {
+		background-image: url("/img/Group-37.svg");
+	}
+
+	.custos__cartao--estrutura {
+		background-image: url("/img/Group-30-1.svg");
+	}
+
+	.custos__cartao-titulo,
+	.custos__lista {
+		width: 76%;
+	}
+
+	/* "Custos de estrutura" é curto e não chega à ilustração */
+	.custos__cartao--estrutura .custos__cartao-titulo {
+		width: 100%;
+	}
+
+	.custos__lista {
+		margin-top: -14px;
+		font-size: 18px;
+		color: var(--cinza-suave);
+	}
+
+	/* ---------- Tablet ---------- */
+	@media (max-width: 1024px) {
+		.custos__titulo-bloco,
+		.custos__intro {
+			width: 100%;
+		}
+
+		.custos__cartao {
+			width: 48%;
+		}
+
+		/* título e lista numa coluna que termina antes da ilustração */
+		.custos__cartao-titulo,
+		.custos__lista {
+			width: 64%;
+		}
+	}
+
+	/* Tablet em pé: cartão estreito demais para ilustração + texto */
+	@media (min-width: 768px) and (max-width: 899px) {
+		.custos__cartao--diretos,
+		.custos__cartao--estrutura {
+			background-image: none;
+		}
+
+		.custos__cartao-titulo,
+		.custos__lista {
+			width: 76%;
+		}
+	}
+
+	/* ---------- Celular ---------- */
+	@media (max-width: 767px) {
+		.custos {
+			margin: 24px 0 0;
+			padding: 0;
+		}
+
+		.custos__grade {
+			flex-direction: column;
+			align-items: center;
+			min-height: 0;
+		}
+
+		.custos__titulo-bloco,
+		.custos__intro,
+		.custos__cartao {
+			width: 100%;
+		}
+
+		.custos__titulo-bloco,
+		.custos__intro {
+			align-items: center;
+			text-align: center;
+			padding-inline: 0;
+		}
+
+		.custos__titulo {
+			margin-top: 0;
+			font-size: 32px;
+		}
+
+		.custos__intro .sublinhado {
+			margin-top: 4px;
+		}
+
+		.custos__intro p {
+			width: 100%;
+			margin-top: -18px;
+			font-size: 16px;
+		}
+
+		/* no celular o SVG de fundo é usado inteiro (cover), como no original */
+		.custos__cartao {
+			background-size: cover;
+			background-position: center;
+		}
+
+		.custos__cartao--estrutura {
+			margin-top: 20px;
+			background-image: url("/img/Group-32.svg");
+		}
+
+		.custos__cartao--diretos .custos__cartao-titulo {
+			width: 196px;
+		}
+
+		.custos__cartao--diretos .custos__lista {
+			width: 100%;
+		}
+
+		.custos__cartao--estrutura .custos__cartao-titulo {
+			width: 145px;
+		}
+
+		.custos__cartao--estrutura .custos__lista {
+			width: 226px;
+		}
+
+		.custos__lista {
+			font-size: 16px;
+		}
+	}
+</style>

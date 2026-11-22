@@ -1,0 +1,183 @@
+---
+// "Perguntas frequentes": duas colunas de perguntas que abrem e fecham.
+// Usa <details>/<summary> nativos (funciona sem JavaScript); o atributo
+// "name" faz cada coluna abrir uma pergunta por vez, como no Elementor.
+const colunas = [
+	[
+		{
+			pergunta: 'Se é adoção, por que existe taxa?',
+			resposta: 'A taxa não é pelo animal. Cobre cuidados de saúde, estrutura e protocolos que mantêm o ciclo funcionando.',
+			aberta: true,
+		},
+		{
+			pergunta: 'A Adote Vi.Ca é uma ONG?',
+			resposta: 'Não. Somos um centro de adoção com equipe e estrutura própria, em parceria com ONGs e protetores.',
+		},
+	],
+	[
+		{
+			pergunta: 'Vocês garantem a saúde do animal?',
+			resposta: 'Não existe garantia absoluta. Ele sai cuidado e vacinado, mas doenças incubadas podem aparecer depois.',
+		},
+		{
+			pergunta: 'E se adoecer após a adoção?',
+			resposta:
+				'Oferecemos consulta de retorno incluída no valor da taxa e orientação completa. Após a adoção, o tutor assume o cuidado clínico.',
+		},
+	],
+];
+
+// Dados estruturados de FAQ para o Google
+const schema = {
+	'@context': 'https://schema.org',
+	'@type': 'FAQPage',
+	mainEntity: colunas.flat().map((q) => ({
+		'@type': 'Question',
+		name: q.pergunta,
+		acceptedAnswer: { '@type': 'Answer', text: q.resposta },
+	})),
+};
+---
+
+<section class="faq" data-ref="e559386">
+	<div class="wrap faq__conteudo">
+		<h2 class="faq__titulo" data-ref="d81b397"><span class="script">Perguntas</span><br /> frequentes</h2>
+
+		<div class="faq__colunas" data-ref="63765cf">
+			{
+				colunas.map((coluna, i) => (
+					<div class="faq__coluna">
+						{coluna.map((q) => (
+							<details class="faq__item" name={`faq-${i + 1}`} open={q.aberta}>
+								<summary>
+									<span>{q.pergunta}</span>
+									<svg class="faq__icone" aria-hidden="true" viewBox="0 0 448 512" xmlns="http://www.w3.org/2000/svg">
+										<path
+											class="faq__mais"
+											d="M416 208H272V64c0-17.67-14.33-32-32-32h-32c-17.67 0-32 14.33-32 32v144H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h144v144c0 17.67 14.33 32 32 32h32c17.67 0 32-14.33 32-32V304h144c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z"
+										/>
+										<path
+											class="faq__menos"
+											d="M416 208H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h384c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z"
+										/>
+									</svg>
+								</summary>
+								<div class="faq__resposta">
+									<p>{q.resposta}</p>
+								</div>
+							</details>
+						))}
+					</div>
+				))
+			}
+		</div>
+	</div>
+	<script type="application/ld+json" set:html={JSON.stringify(schema)} />
+</section>
+
+<style>
+	.faq {
+		padding-block: 64px;
+	}
+
+	.faq__conteudo {
+		display: flex;
+		flex-direction: column;
+		gap: 20px;
+	}
+
+	.faq__titulo {
+		font-size: 44px;
+		text-align: center;
+	}
+
+	.faq__titulo .script {
+		font-size: var(--script-titulo);
+	}
+
+	.faq__colunas {
+		display: flex;
+		gap: 20px;
+		padding: 10px;
+	}
+
+	.faq__coluna {
+		display: flex;
+		flex-direction: column;
+		gap: 22px;
+		flex: 1;
+		min-width: 0;
+	}
+
+	.faq__item summary {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		gap: 10px;
+		padding: 20px;
+		border: 1px solid #d5d8dc;
+		border-radius: 11px;
+		background: var(--bege);
+		color: var(--cinza);
+		font-weight: 700;
+		font-size: 18px;
+		line-height: 1.5;
+		cursor: pointer;
+		list-style: none;
+	}
+
+	.faq__item summary::-webkit-details-marker {
+		display: none;
+	}
+
+	.faq__item summary:focus-visible {
+		outline: 2px solid var(--azul);
+		outline-offset: 2px;
+	}
+
+	.faq__icone {
+		width: 13px;
+		height: 15px;
+		flex: none;
+		fill: var(--cinza);
+	}
+
+	.faq__menos,
+	.faq__item[open] .faq__mais {
+		display: none;
+	}
+
+	.faq__item[open] .faq__menos {
+		display: inline;
+	}
+
+	.faq__resposta {
+		padding: 10px;
+	}
+
+	.faq__resposta p {
+		font-size: 18px;
+		color: var(--cinza-suave);
+	}
+
+	@media (max-width: 1024px) {
+		.faq__colunas {
+			flex-direction: column;
+		}
+	}
+
+	@media (max-width: 767px) {
+		.faq {
+			padding-block: 0;
+		}
+
+		.faq__titulo {
+			margin-top: 32px;
+			font-size: 32px;
+		}
+
+		.faq__colunas {
+			padding: 0;
+		}
+	}
+</style>

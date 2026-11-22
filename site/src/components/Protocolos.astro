@@ -1,0 +1,315 @@
+---
+// "Protocolos de saúde e cuidados": cartão largo com 4 cuidados em 2 colunas.
+const colunas = [
+	[
+		{ icone: 'testes', titulo: 'Testes Rápidos', texto: 'Testes virais (parvovirose e cinomose).', ref: '775df87' },
+		{
+			icone: 'vacinacao',
+			titulo: 'Vacinação',
+			texto: 'Protocolo de vacina de acordo com a idade e caso não tenha sido vacinado contra a raiva.',
+			ref: '43422a5',
+		},
+	],
+	[
+		{
+			icone: 'castracao',
+			titulo: 'Castração',
+			texto: 'Equipe própria, anestesia segura e acompanhamento pós-operatório. Todos os animais são castrados antes da adoção.',
+			ref: '852bf27',
+		},
+		{
+			icone: 'estrutura',
+			titulo: 'Comportamento',
+			texto: 'Orientações sobre adaptação e convivência — cada animal reage ao novo lar de forma única.',
+			ref: 'e2110ab',
+		},
+	],
+];
+---
+
+<section class="protocolos" data-ref="e6093d6">
+	<div class="protocolos__cartao" data-ref="af3cf04">
+		<div class="protocolos__cabecalho" data-ref="14e99eb">
+			<div class="protocolos__titulo-bloco" data-ref="f2a884f">
+				<img class="protocolos__enfeite" src="/img/element-52.svg" alt="" width="131" height="108" data-ref="af8ae3a" />
+				<h2 class="protocolos__titulo" data-ref="5bbd6f6">Protocolos de saúde <br /><span class="script">e cuidados</span></h2>
+			</div>
+			<div class="protocolos__intro" data-ref="f65190e">
+				<img class="sublinhado" src="/img/sublinhado.svg" alt="" width="203" height="3" />
+				<p data-ref="2c04d91">
+					Cada animal passa por protocolos veterinários antes da adoção. Nosso compromisso é reduzir riscos com padronização e
+					acompanhamento clínico constante.
+				</p>
+			</div>
+		</div>
+
+		<div class="protocolos__colunas" data-ref="b35fc41">
+			{
+				colunas.map((coluna, i) => (
+					<div class="protocolos__coluna">
+						<ul class:list={['protocolos__lista', `protocolos__lista--${i + 1}`]}>
+							{coluna.map((item) => (
+								<li class="protocolos__item" data-ref={item.ref}>
+									<img class="icone" src={`/img/icones/${item.icone}.svg`} alt="" width="48" height="48" loading="lazy" />
+									<div>
+										<h3>{item.titulo}</h3>
+										<p>{item.texto}</p>
+									</div>
+								</li>
+							))}
+						</ul>
+					</div>
+				))
+			}
+		</div>
+	</div>
+</section>
+
+<style>
+	.protocolos {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		min-height: 660px;
+		margin-top: 100px;
+		padding: 10px;
+		background: var(--branco);
+	}
+
+	.protocolos__cartao {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		gap: 20px;
+		width: min(var(--cartao-largo), 100vw - 32px);
+		min-height: 790px;
+		flex: none;
+		padding: 0 0 64px;
+		border-radius: 64px;
+		background: url("/img/protocolos-saude-desk.svg") top center / cover no-repeat;
+	}
+
+	.protocolos__cabecalho {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		width: 90%;
+		padding: 10px;
+	}
+
+	.protocolos__titulo-bloco,
+	.protocolos__intro {
+		display: flex;
+		flex-direction: column;
+		gap: 20px;
+		flex: 1;
+		padding: 10px;
+	}
+
+	.protocolos__titulo-bloco {
+		/* ícone vazio do Elementor (24px) que ficava acima da ilustração */
+		padding-top: 53px;
+	}
+
+	.protocolos__enfeite {
+		width: 71px;
+		margin-bottom: 13px;
+	}
+
+	.protocolos__titulo {
+		width: 77%;
+		margin-top: -25px;
+		font-size: 44px;
+	}
+
+	.protocolos__titulo .script {
+		font-size: var(--script-titulo);
+	}
+
+	.protocolos__intro {
+		margin-top: 47px;
+		padding: 0;
+	}
+
+	.protocolos__intro p {
+		width: 76%;
+		margin-top: 0;
+		font-size: 18px;
+		color: var(--cinza);
+	}
+
+	.protocolos__colunas {
+		display: flex;
+		align-items: flex-start;
+		width: 88%;
+		padding: 10px;
+	}
+
+	.protocolos__coluna {
+		display: flex;
+		flex: 1;
+		min-width: 0;
+		align-self: stretch;
+		padding: 10px;
+	}
+
+	.protocolos__lista {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr);
+		align-content: start;
+		gap: 20px;
+		width: 100%;
+		margin: 0;
+		padding: 32px 32px 57px;
+		border-radius: 15px;
+		background: var(--branco);
+		list-style: none;
+	}
+
+	.protocolos__lista--2 {
+		padding-bottom: 29px;
+	}
+
+	.protocolos__item {
+		display: flex;
+		gap: 17px;
+		width: 89%;
+		padding: 23px;
+		border-radius: 11px;
+	}
+
+	.protocolos__item .icone {
+		width: 48px;
+		height: 48px;
+	}
+
+	.protocolos__item > div {
+		flex: 1;
+	}
+
+	.protocolos__item h3 {
+		margin: 8px 0 34px;
+		color: var(--azul);
+		font-weight: 700;
+		font-size: 22px;
+		line-height: 7px;
+	}
+
+	.protocolos__item p {
+		margin: 0;
+		font-size: 18px;
+		font-weight: 500;
+		color: var(--azul);
+	}
+
+	/* ---------- Tablet ---------- */
+	@media (max-width: 1024px) {
+		.protocolos__cartao {
+			width: 100%;
+		}
+
+		.protocolos__item h3 {
+			line-height: 1.3em;
+		}
+	}
+
+	/* ---------- Celular ---------- */
+	@media (max-width: 767px) {
+		.protocolos {
+			min-height: 0;
+			margin-top: 0;
+			padding: 8px 20px 0;
+		}
+
+		.protocolos__cartao {
+			min-height: 1072px;
+			padding: 0 26px 60px;
+			border-radius: 16px;
+			background-image: url("/img/protocolos-saude-1.svg");
+		}
+
+		.protocolos__cabecalho {
+			flex-direction: column;
+			width: 100%;
+		}
+
+		.protocolos__titulo-bloco,
+		.protocolos__intro {
+			align-items: center;
+			text-align: center;
+		}
+
+		.protocolos__enfeite {
+			width: 50px;
+			margin: -29px 0 6px;
+		}
+
+		.protocolos__titulo {
+			width: 77%;
+			font-size: 32px;
+		}
+
+		.protocolos__intro {
+			margin-top: -12px;
+		}
+
+		.protocolos__intro p {
+			width: 100%;
+			margin-top: -14px;
+			font-size: 16px;
+		}
+
+		.protocolos__colunas {
+			flex-direction: column;
+			width: 100%;
+			padding: 0;
+		}
+
+		.protocolos__coluna {
+			width: 100%;
+			padding: 0;
+		}
+
+		.protocolos__lista--1 {
+			margin-top: -17px;
+			padding: 32px;
+			border-radius: 16px 16px 0 0;
+		}
+
+		.protocolos__lista--2 {
+			padding: 0 32px 32px;
+			border-radius: 0 0 16px 16px;
+		}
+
+		/* no celular o ícone fica em cima do texto */
+		.protocolos__item {
+			flex-direction: column;
+			align-items: center;
+			width: 100%;
+			padding: 0;
+			gap: 11px;
+			text-align: center;
+		}
+
+		.protocolos__item > div {
+			width: 100%;
+		}
+
+		.protocolos__item .icone {
+			width: 32px;
+			height: 32px;
+		}
+
+		.protocolos__item h3 {
+			margin-bottom: 22px;
+			font-size: 18px;
+			line-height: 0.2em;
+		}
+
+		.protocolos__item p {
+			font-size: 14px;
+		}
+	}
+</style>

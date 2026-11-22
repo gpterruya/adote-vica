@@ -1,0 +1,311 @@
+---
+// "ONGs e protetores parceiros". No Elementor havia uma versão para desktop
+// (184c278) e outra para tablet/celular (4be99e8); aqui é uma só:
+//   desktop: 3 fotos lado a lado e, abaixo, 3 cartões;
+//   tablet:  pares foto + cartão, 2 por linha;
+//   celular: foto, cartão, foto, cartão…
+const parceiros = [
+	{
+		nome: 'A Lista de São Francisco',
+		texto: 'Parceira ativa. Fornece resgatados para preparo e adoção.',
+		foto: { desktop: '/img/1.webp', movel: '/img/lista-sao-francisco.webp', largura: 755, altura: 488 },
+		alt: 'Logo da ONG A Lista de São Francisco',
+		ref: 'df734e2',
+	},
+	{
+		nome: 'Protetores independentes',
+		texto: 'Parceira ativa. Fornece resgatados para preparo e adoção.',
+		foto: { desktop: '/img/2.webp', largura: 800, altura: 534 },
+		alt: 'Protetora independente com cachorro resgatado',
+		ref: 'd5e8086',
+	},
+	{
+		nome: 'Canis parceiros',
+		texto:
+			'Alguns canis encaminham ao Vi.Ca matrizes e filhotes que não foram comercializados. O Vi.Ca assume os custos de cuidados e oferece a esses animais a oportunidade de uma adoção responsável e um novo lar.',
+		foto: { desktop: '/img/3.webp', largura: 800, altura: 534 },
+		alt: 'Filhotes vindos de canil parceiro',
+		ref: 'ca38123',
+	},
+];
+---
+
+<section class="parceiros" data-ref="184c278">
+	<div class="parceiros__cartao" data-ref="a31f9c0">
+		<div class="parceiros__cabecalho" data-ref="579faf1">
+			<div class="parceiros__titulo-bloco" data-ref="e3cf082">
+				<img class="parceiros__enfeite-movel" src="/img/image-11.webp" alt="" width="195" height="182" />
+				<h2 class="parceiros__titulo" data-ref="9619da9"><span class="script">ONGs</span><br /> e protetores parceiros</h2>
+				<img class="parceiros__coracao" src="/img/element-51.svg" alt="" width="102" height="196" data-ref="7de4b9e" />
+			</div>
+			<div class="parceiros__intro" data-ref="c73c46d">
+				<img class="sublinhado" src="/img/sublinhado.svg" alt="" width="203" height="3" />
+				<div data-ref="c358c41">
+					<p>Trabalhamos com ONGs e protetores independentes que resgatam vidas diariamente.</p>
+					<p>Nosso papel é garantir estrutura e protocolos de saúde até a adoção responsável.</p>
+				</div>
+			</div>
+		</div>
+
+		<ul class="parceiros__grade" data-ref="aa1f93b">
+			{
+				parceiros.map((p) => (
+					<>
+						<li class="parceiros__foto">
+							<picture>
+								{p.foto.movel && <source media="(max-width: 1024px)" srcset={p.foto.movel} />}
+								<img src={p.foto.desktop} alt={p.alt} width={p.foto.largura} height={p.foto.altura} loading="lazy" />
+							</picture>
+						</li>
+						<li class="parceiros__item" data-ref={p.ref}>
+							<h3>{p.nome}</h3>
+							<img class="sublinhado" src="/img/sublinhado.svg" alt="" width="203" height="3" />
+							<p>{p.texto}</p>
+						</li>
+					</>
+				))
+			}
+		</ul>
+	</div>
+</section>
+
+<style>
+	.parceiros {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		min-height: 1125px;
+		margin-block: 30px;
+		padding: 10px;
+	}
+
+	.parceiros__cartao {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		gap: 20px;
+		width: min(var(--cartao-largo), 100vw - 32px);
+		min-height: 1066px;
+		flex: none;
+		padding: 10px;
+		background: url("/img/Rectangle-58.svg") center / cover no-repeat;
+	}
+
+	.parceiros__cabecalho {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		width: 90%;
+		padding: 10px;
+	}
+
+	.parceiros__titulo-bloco {
+		display: flex;
+		flex: 0 0 64%;
+		align-items: flex-start;
+		padding: 10px;
+	}
+
+	.parceiros__titulo {
+		margin-top: -25px;
+		font-size: 44px;
+	}
+
+	.parceiros__titulo .script {
+		font-size: var(--script-titulo);
+	}
+
+	.parceiros__coracao {
+		width: 14%;
+		margin: -48px 0 0 29px;
+	}
+
+	.parceiros__enfeite-movel {
+		display: none;
+	}
+
+	.parceiros__intro {
+		display: flex;
+		flex-direction: column;
+		gap: 20px;
+		flex: 1;
+		min-width: 0;
+		margin-top: -25px;
+	}
+
+	.parceiros__intro p {
+		font-size: 18px;
+		color: var(--cinza);
+	}
+
+	.parceiros__grade {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 30px 20px;
+		width: 88%;
+		margin: 0;
+		padding: 10px;
+		list-style: none;
+	}
+
+	.parceiros__foto {
+		grid-row: 1;
+	}
+
+	.parceiros__foto img {
+		width: 100%;
+	}
+
+	.parceiros__item {
+		grid-row: 2;
+		display: flex;
+		flex-direction: column;
+		gap: 20px;
+		padding: 40px;
+		border-radius: 11px;
+		background: var(--branco);
+	}
+
+	.parceiros__item h3 {
+		font-weight: 700;
+		font-size: 22px;
+		line-height: 1.5;
+		color: #54595f;
+	}
+
+	.parceiros__item .sublinhado {
+		margin-top: 0;
+	}
+
+	.parceiros__item p {
+		width: 82%;
+		margin-top: -14px;
+		font-size: 18px;
+		color: var(--cinza-suave);
+	}
+
+	/* ---------- Tablet: pares foto + cartão, 2 por linha ---------- */
+	@media (max-width: 1024px) {
+		.parceiros {
+			min-height: 1125px;
+		}
+
+		.parceiros__cartao {
+			width: 100%;
+			background: none;
+		}
+
+		.parceiros__cabecalho {
+			flex-direction: column;
+			width: 100%;
+		}
+
+		.parceiros__titulo-bloco {
+			flex-basis: auto;
+			width: 100%;
+		}
+
+		.parceiros__titulo {
+			width: 100%;
+		}
+
+		.parceiros__coracao {
+			display: none;
+		}
+
+		.parceiros__enfeite-movel {
+			display: block;
+		}
+
+		.parceiros__intro {
+			width: 100%;
+		}
+
+		.parceiros__grade {
+			grid-template-columns: repeat(2, 1fr);
+			width: 100%;
+		}
+
+		.parceiros__foto,
+		.parceiros__item {
+			grid-row: auto;
+		}
+
+		.parceiros__item p {
+			width: 100%;
+		}
+	}
+
+	/* ---------- Celular ---------- */
+	@media (max-width: 767px) {
+		.parceiros {
+			min-height: 0;
+			margin-block: 0;
+			padding: 24px 20px 0;
+		}
+
+		.parceiros__cartao {
+			min-height: 0;
+			padding: 0 20px 40px;
+			border-radius: 16px;
+			background: url("/img/protocolos-saude-1.svg") top center / cover no-repeat;
+		}
+
+		.parceiros__titulo-bloco {
+			flex-direction: column;
+			align-items: center;
+			padding: 0;
+			text-align: center;
+		}
+
+		/* no celular a ilustração não aparecia no site antigo (largura 0);
+		   fica só o respiro que ela ocupava */
+		.parceiros__enfeite-movel {
+			display: none;
+		}
+
+		.parceiros__titulo {
+			margin-top: 68px;
+			font-size: 32px;
+		}
+
+		.parceiros__intro {
+			align-items: center;
+			margin-top: 0;
+			text-align: center;
+		}
+
+		.parceiros__intro .sublinhado {
+			margin-top: 30px;
+		}
+
+		.parceiros__intro div {
+			margin-top: -15px;
+		}
+
+		.parceiros__intro p {
+			font-size: 16px;
+		}
+
+		.parceiros__grade {
+			grid-template-columns: 1fr;
+			gap: 20px;
+			padding: 0;
+		}
+
+		.parceiros__item {
+			align-items: center;
+			padding: 32px;
+			text-align: center;
+		}
+
+		.parceiros__item:nth-child(2) {
+			padding: 24px;
+		}
+
+		.parceiros__item p {
+			font-size: 16px;
+		}
+	}
+</style>

@@ -1,0 +1,136 @@
+---
+// "Importante saber:" — 3 avisos.
+// ⚠️ O 3º aviso é exigência do jurídico (Código de Ética Veterinária):
+// o site não pode mostrar valores de serviços. Ver README.
+const avisos = [
+	{ texto: 'Não reservamos pets e damos prioridade a quem chega primeiro ao ponto de adoção.', ref: 'ba7480f' },
+	{ texto: 'A castração é obrigatória e o valor varia conforme o tipo de anestesia, peso e sexo do pet.', ref: '02ae0ec' },
+	{
+		texto:
+			'Em atendimento ao Código de Ética Veterinária, não divulgamos os valores de consultas, castrações ou outros procedimentos médico veterinários.',
+		ref: '36386b1',
+	},
+];
+---
+
+<section class="importante" data-ref="42b95e1">
+	<div class="wrap">
+		<div class="importante__cartao" data-ref="c93acf3">
+			<h2 class="importante__titulo" data-ref="bad282c">Importante saber:</h2>
+
+			<ul class="importante__grade" data-ref="dcb6937">
+				{
+					avisos.map((aviso) => (
+						<li class="importante__aviso" data-ref={aviso.ref}>
+							<img class="icone" src="/img/icones/alerta.svg" alt="" width="51" height="51" />
+							<p>{aviso.texto}</p>
+						</li>
+					))
+				}
+			</ul>
+		</div>
+	</div>
+</section>
+
+<style>
+	.importante {
+		margin-top: 50px;
+		padding-block: 10px;
+	}
+
+	.importante__cartao {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		gap: 20px;
+		min-height: 505px;
+		padding: 10px;
+		border-radius: 56px;
+		background: url("/img/importante-saber-desk.svg") top center / cover no-repeat;
+	}
+
+	.importante__titulo {
+		margin-top: 30px;
+		font-size: 38px;
+		text-align: center;
+	}
+
+	.importante__grade {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 20px;
+		width: 84%;
+		margin: 0 0 20px;
+		padding: 0;
+		list-style: none;
+	}
+
+	.importante__aviso {
+		display: flex;
+		flex-direction: column;
+		gap: 7px;
+		padding: 32px;
+		border-radius: 11px;
+		background: var(--branco);
+	}
+
+	.importante__aviso .icone {
+		width: 51px;
+		height: 51px;
+	}
+
+	.importante__aviso p {
+		margin: 0;
+		font-size: 22px;
+		font-weight: 700;
+		color: var(--azul);
+	}
+
+	/* ---------- Tablet: 2 colunas, o 3º aviso centralizado embaixo ---------- */
+	@media (max-width: 1024px) {
+		.importante__grade {
+			grid-template-columns: repeat(2, 1fr);
+			width: 100%;
+		}
+
+		.importante__aviso:last-child {
+			grid-column: 1 / -1;
+			justify-self: center;
+			width: 47%;
+		}
+	}
+
+	/* ---------- Celular ---------- */
+	@media (max-width: 767px) {
+		.importante {
+			margin-top: 0;
+			padding-block: 24px;
+		}
+
+		.importante__cartao {
+			min-height: 842px;
+			padding: 32px;
+			border-radius: 16px;
+			background-image: url("/img/importante-saber.svg");
+		}
+
+		.importante__titulo {
+			font-size: 29px;
+		}
+
+		.importante__grade {
+			grid-template-columns: 1fr;
+		}
+
+		.importante__aviso:last-child {
+			grid-column: auto;
+			justify-self: stretch;
+			width: 100%;
+		}
+
+		.importante__aviso p {
+			font-size: 18px;
+		}
+	}
+</style>

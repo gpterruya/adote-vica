@@ -1,0 +1,151 @@
+---
+// "Como funciona o processo de adoção": 5 passos numerados + foto.
+const passos = [
+	{ texto: 'Conheça os animais disponíveis no Instagram e venha presencialmente para adotar.', ref: '03de54a' },
+	{ texto: 'Preencha o questionário de perfil e passe pela avaliação da equipe (obrigatório ser maior 18).', ref: 'cf08c45', largo: true },
+	{ texto: 'Apresente um documento com foto e assine o Termo de Adoção (leia com atenção).', ref: '9671ba5' },
+	{
+		texto:
+			'Se aprovado, pague a taxa de adoção que inclui teses, vacina, microchip e primeira consulta e o valor de castração (valor da castração varia de acordo com o pet)',
+		ref: 'b8dae91',
+	},
+	{ texto: 'Receba o pet com protocolo de saúde e orientação da equipe.', ref: '3f50d85' },
+];
+---
+
+<section class="processo" data-ref="770bdf6">
+	<div class="wrap processo__grade">
+		<div class="processo__texto" data-ref="0b7e5d1">
+			<h2 class="processo__titulo" data-ref="59731c9">Como funciona o <span class="script">processo de adoção</span></h2>
+
+			<ol class="processo__passos">
+				{
+					passos.map((passo, i) => (
+						<li class:list={['processo__passo', { 'processo__passo--largo': passo.largo }]} data-ref={passo.ref}>
+							<img class="icone" src={`/img/icones/passo-${i + 1}.svg`} alt={`Passo ${i + 1}`} width="75" height="75" />
+							<p>{passo.texto}</p>
+						</li>
+					))
+				}
+			</ol>
+		</div>
+
+		<div class="processo__foto" data-ref="b425739">
+			<img src="/img/Group-84.webp" alt="Tutora com cachorro adotado no Vi.Ca" width="635" height="710" loading="lazy" />
+		</div>
+	</div>
+</section>
+
+<style>
+	.processo {
+		padding-block: 10px;
+	}
+
+	.processo__grade {
+		display: flex;
+		min-height: 767px; /* 787px − respiro */
+	}
+
+	.processo__texto {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		gap: 20px;
+		width: 44%;
+		flex: none;
+		padding: 10px;
+	}
+
+	.processo__titulo {
+		margin-top: 30px;
+		font-size: 44px;
+	}
+
+	.processo__titulo .script {
+		font-size: var(--script-titulo-44);
+	}
+
+	.processo__passos {
+		display: flex;
+		flex-direction: column;
+		gap: 20px;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	.processo__passo {
+		display: flex;
+		align-items: center;
+		gap: 16px;
+		width: 77%;
+		margin-top: 15px;
+	}
+
+	.processo__passo--largo {
+		width: 80%;
+	}
+
+	.processo__passo .icone {
+		width: 75px;
+		height: 75px;
+	}
+
+	.processo__passo p {
+		margin: 0;
+		font-size: 18px;
+		font-weight: 700;
+		color: var(--azul);
+	}
+
+	.processo__foto {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		width: 56%;
+		padding: 10px;
+	}
+
+	/* ---------- Tablet ---------- */
+	@media (max-width: 1024px) {
+		.processo__grade {
+			flex-direction: column;
+		}
+
+		.processo__texto,
+		.processo__foto {
+			width: 100%;
+		}
+	}
+
+	/* ---------- Celular ---------- */
+	@media (max-width: 767px) {
+		.processo {
+			padding: 0 0 24px;
+		}
+
+		.processo__texto {
+			gap: 10px;
+		}
+
+		.processo__titulo {
+			font-size: 32px;
+			text-align: center;
+		}
+
+		.processo__passos {
+			gap: 10px;
+		}
+
+		.processo__passo,
+		.processo__passo--largo {
+			width: 100%;
+		}
+
+		.processo__passo .icone {
+			width: 57px;
+			height: 57px;
+		}
+
+	}
+</style>
