@@ -22,7 +22,7 @@
         ]
       },
       {
-        "source": "**/*.@(html|xml|txt)",
+        "regex": "^/(?:[^.]*|.*\\.(?:html|xml|txt))$",
         "headers": [{ "key": "Cache-Control", "value": "public, max-age=300" }]
       },
       {
