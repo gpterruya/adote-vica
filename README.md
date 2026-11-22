@@ -1,9 +1,11 @@
-# Adote Vi.Ca — ambiente local
+# Adote Vi.Ca
 
-Cópia local do site [adotevica.com.br](https://adotevica.com.br) (WordPress + Elementor) rodando em Docker, e o plugin **`vica-custom`**, onde ficam as customizações de front-end versionadas no Git.
+Código do site [adotevica.com.br](https://adotevica.com.br).
 
-- **Produção:** Hostinger (plano Single Web Hosting, sem SSH) com DNS na Cloudflare
-- **Local:** PHP 8.3 + Apache e MariaDB 10.6, em `http://localhost:8080`, rodando a partir do **WSL2 (Ubuntu)**
+- **No ar desde 22/11/2026:** site estático em [Astro](https://astro.build) na pasta `site/`, hospedado no **Firebase Hosting** (Google Cloud), com DNS na **Cloudflare**. Cada mudança juntada na `main` passa pelas verificações e é publicada automaticamente. **Comece pela seção 7.**
+- **Reserva (legado):** o antigo site em WordPress + Elementor continua parado na Hostinger (plano Single Web Hosting, sem SSH) até o cancelamento do plano. As seções 1 a 5 descrevem esse ambiente (cópia local em Docker no WSL2, plugin **`vica-custom`**, Duplicator) e só servem para consulta ou para voltar ao site antigo (seção 7.5, "Para voltar ao WordPress").
+
+> Os textos, o layout e as regras do site (por exemplo, a proibição de mostrar valores de serviços, seção 3.3) agora ficam em `site/`. Mudanças feitas no Elementor ou no plugin **não aparecem mais** no adotevica.com.br.
 
 ---
 
@@ -11,14 +13,16 @@ Cópia local do site [adotevica.com.br](https://adotevica.com.br) (WordPress + E
 
 ```text
 ~/adote-vica/                  ← dentro do Ubuntu (WSL2)
+├── site/                      ← SITE NO AR: Astro + Firebase Hosting (seção 7)
+├── .github/workflows/site.yml ← verifica e publica o site a cada push/pull request
+│
+│   (legado: WordPress parado na Hostinger, seções 1 a 5)
 ├── plugins/vica-custom/       ← plugin próprio (versionado) — ver seção 3
 │   ├── vica-custom.php        ← todo o PHP do plugin
 │   ├── assets/css/style.css   ← ajustes de layout sobre o Elementor
 │   ├── assets/css/404.css     ← estilo da página 404
 │   ├── assets/img/*.svg       ← versões otimizadas de SVGs dos uploads
 │   └── templates/404.php      ← página 404 com o visual do site
-├── site/                      ← NOVO site estático em Astro (seção 7, em migração)
-├── .github/workflows/site.yml ← verificações automáticas do site estático
 ├── tools/svg/                 ← scripts para otimizar SVGs (seção 3.4)
 ├── duplicator/                ← WordPress restaurado (NÃO versionado)
 ├── dist/                      ← zips gerados para deploy (NÃO versionado)
@@ -42,7 +46,7 @@ O projeto precisa ficar **dentro do sistema de arquivos do Ubuntu** (`/home/...`
 
 ---
 
-## Requisitos
+## Requisitos (legado: WordPress local)
 
 - Windows com **WSL2** e a distro **Ubuntu** (`wsl --install -d Ubuntu`)
 - [Docker Desktop](https://www.docker.com/products/docker-desktop/) com a integração ativada em **Settings → Resources → WSL integration → Ubuntu**
@@ -53,7 +57,7 @@ O projeto precisa ficar **dentro do sistema de arquivos do Ubuntu** (`/home/...`
 
 ---
 
-## 1. Primeira instalação (restaurar o site localmente)
+## 1. (Legado) Primeira instalação do WordPress local
 
 1. No terminal do Ubuntu, clone o repositório na sua pasta pessoal:
 
@@ -118,7 +122,7 @@ git config --global credential.helper "/mnt/c/Program\ Files/Git/mingw64/bin/git
 
 ---
 
-## 2. Uso no dia a dia
+## 2. (Legado) Uso do WordPress local no dia a dia
 
 ### Abrir o projeto no VS Code
 
@@ -148,7 +152,7 @@ O Docker Desktop precisa estar aberto no Windows.
 
 ---
 
-## 3. O plugin `vica-custom`
+## 3. (Legado) O plugin `vica-custom`
 
 Tudo o que é código próprio do site fica no plugin, versionado no Git e publicado como zip (seção 4). O conteúdo e o layout continuam no Elementor.
 
@@ -336,7 +340,7 @@ Ao mudar o PHP ou o comportamento do plugin, aumente o `Version:` no cabeçalho 
 
 ---
 
-## 4. Publicar em produção
+## 4. (Legado) Publicar o plugin no WordPress
 
 O plano da Hostinger não tem SSH, então o deploy é feito pelo próprio painel do WordPress.
 
@@ -368,7 +372,7 @@ O plano da Hostinger não tem SSH, então o deploy é feito pelo próprio painel
 
 ---
 
-## 5. Atualizar a cópia local a partir da produção
+## 5. (Legado) Atualizar a cópia local do WordPress
 
 Quando o conteúdo de produção mudar, por exemplo com edições no Elementor, textos ou imagens novas:
 
@@ -392,10 +396,10 @@ O site está cadastrado no [Google Search Console](https://search.google.com/sea
 | Item | Configuração |
 |---|---|
 | Propriedade | Prefixo de URL: `https://adotevica.com.br/` |
-| Verificação | Meta tag `google-site-verification`, inserida pelo **Yoast SEO → Configurações → Conexões do site → Google** |
-| Sitemap enviado | `sitemap_index.xml` (gerado pelo Yoast; hoje lista só a página inicial) |
+| Verificação | Meta tag `google-site-verification`. No site atual, o código fica em `site/src/data/site.ts` (`googleSiteVerification`). No WordPress, era inserida pelo Yoast. |
+| Sitemap enviado | `sitemap_index.xml`, no mesmo endereço do Yoast. Hoje é gerado por `site/src/pages/sitemap_index.xml.ts` e lista só a página inicial. |
 
-> ⚠️ **Não apague o código de verificação do Yoast.** O Google confere a tag de tempos em tempos; se ela sumir, a propriedade deixa de estar verificada e os relatórios param de ser atualizados.
+> ⚠️ **Não apague o código de verificação.** O Google confere a tag de tempos em tempos; se ela sumir, a propriedade deixa de estar verificada e os relatórios param de ser atualizados. A verificação automática do GitHub (seção 7.4) bloqueia a publicação se a tag faltar.
 
 Para conferir se a tag está no ar:
 
@@ -405,15 +409,15 @@ curl -s https://adotevica.com.br/ | grep -o '<meta name="google-site-verificatio
 
 ### Título da página inicial no Google
 
-O título que aparece na aba do navegador, no Google e na prévia de links (WhatsApp, redes) **não é** o título do topo da página: ele vem do Yoast.
+O título que aparece na aba do navegador, no Google e na prévia de links (WhatsApp, redes) **não é** o título do topo da página.
 
-| Onde aparece | Valor atual | Onde editar |
+| Onde aparece | Valor atual | Onde editar (site atual) |
 |---|---|---|
-| `<title>`, `og:title` e dados estruturados | Adote Vi.Ca - Centro de Reabilitação e Adoção Responsável | **Páginas → Página Principal → Editar** (editor do WordPress, não o Elementor) → quadro **Yoast SEO → Aparência de pesquisa → Título de SEO** |
-| Meta descrição (texto cinza no Google) | Somos uma empresa privada com o objetivo de conectar animais resgatados… | No mesmo lugar, campo **Meta descrição** |
-| H1 (título visível no topo) | Adote Vi.Ca — Centro de REABILITAÇÃO e Adoção | Elementor (seção 3.3, "Hero da página inicial") |
+| `<title>`, `og:title` e dados estruturados | Adote Vi.Ca - Centro de Reabilitação e Adoção Responsável | `site/src/data/site.ts`, campo `titulo` |
+| Meta descrição (texto cinza no Google) | Somos uma empresa privada com o objetivo de conectar animais resgatados… | `site/src/data/site.ts`, campo `descricao` |
+| H1 (título visível no topo) | Adote Vi.Ca — Centro de REABILITAÇÃO e Adoção | `site/src/components/Hero.astro` |
 
-O título configurado em **Yoast SEO → Configurações** é só um modelo geral; como a página inicial é uma página fixa, vale o campo da própria página. Depois de salvar, clique em **Atualizar**, limpe o cache do WP Rocket e confira:
+No WordPress (legado), o título vinha do quadro **Yoast SEO** da página inicial, e o H1, do Elementor. Depois de publicar uma mudança, confira:
 
 ```bash
 curl -s https://adotevica.com.br/ | grep -o '<title>[^<]*</title>'
@@ -435,15 +439,15 @@ Se depois de uma semana o resultado ainda mostrar o texto antigo, peça a remoç
 
 - **Outra conta precisa de acesso:** em **Configurações → Usuários e permissões**, adicione o e-mail. Não é preciso verificar de novo.
 - **Trocar para uma propriedade de domínio** (cobre `http`, `https` e `www` de uma vez): crie uma propriedade do tipo **Domínio** (`adotevica.com.br`) e verifique com o registro **TXT** que o Google indicar, adicionado no **DNS da Cloudflare**.
-- **O site ganhar páginas novas:** o Yoast as inclui no `sitemap_index.xml` automaticamente. Não é preciso reenviar o sitemap.
+- **O site ganhar páginas novas:** acrescente o endereço à lista `paginas` em `site/src/pages/sitemap_index.xml.ts`. Não é preciso reenviar o sitemap.
 
 ---
 
-## 7. Site estático (Astro) — em migração
+## 7. Site estático (Astro) — o site no ar
 
-A página inicial foi reconstruída em código na pasta `site/`, com o mesmo visual, os mesmos textos e as mesmas regras do site em WordPress. O objetivo é deixar de depender do Elementor (edição visual), do Duplicator (trazer a produção para a máquina) e do upload de zip, e publicar automaticamente a cada push.
+A página inicial foi reconstruída em código na pasta `site/`, com o mesmo visual, os mesmos textos e as mesmas regras do site em WordPress. Assim o site deixou de depender do Elementor (edição visual), do Duplicator (trazer a produção para a máquina) e do upload de zip, e passou a ser publicado automaticamente.
 
-**Situação:** o site novo roda localmente e passa nas verificações, mas **ainda não está no ar**. A produção continua sendo o WordPress até a troca do DNS (seção 7.5).
+**Situação:** no ar em `https://adotevica.com.br` desde **22/11/2026**, servido pelo Firebase Hosting. O `www` redireciona para o endereço sem `www`.
 
 ### 7.1 Como está organizado
 
@@ -534,7 +538,16 @@ A cada push na `main` e a cada pull request que mexa em `site/`, o GitHub roda `
 
 Localmente, as capturas precisam de bibliotecas do sistema que pedem senha de administrador, uma vez só: `sudo npx playwright install-deps chromium` dentro de `site/`. Depois: `npm run preview` em um terminal e `node scripts/capturas.mjs` em outro.
 
-### 7.5 Colocar no ar (Firebase Hosting, Google Cloud) — passos pendentes
+### 7.5 Hospedagem (Firebase Hosting, Google Cloud) — como está configurada
+
+Os passos A a D abaixo já foram feitos em 22/11/2026. Ficam registrados aqui para consulta, ou para refazer tudo num projeto novo.
+
+| Item | Valor |
+|---|---|
+| Projeto Firebase / Google Cloud | `adote-vica` (plano Spark, gratuito) |
+| Endereço do Firebase | `https://adote-vica.web.app` |
+| Conta de serviço que publica | `github-deploy@adote-vica.iam.gserviceaccount.com` (sem chave, passo B) |
+| Variáveis no GitHub (*Settings → Secrets and variables → Actions → Variables*) | `FIREBASE_PROJECT_ID`, `GCP_SERVICE_ACCOUNT`, `GCP_WIF_PROVIDER` |
 
 O site é hospedado no **Firebase Hosting**, o serviço de sites estáticos do Google Cloud. Todo projeto Firebase é um projeto do Google Cloud, aparece no mesmo console e na mesma conta de cobrança. O plano gratuito (Spark) comporta este site: 10 GB de armazenamento e 360 MB de transferência por dia. O HTTPS do domínio é emitido automaticamente.
 
@@ -602,26 +615,44 @@ Se você chegou a criar a conta `github-deploy` pelo console antes, o bloco apro
 2. Confira a prévia em celular, tablet e computador.
 3. Junte o pull request na `main`. O site oficial vai para `https://<ID-do-projeto>.web.app`, ainda sem o domínio.
 
-**D. Trocar o domínio** (é isto que coloca o site novo no ar)
+**D. Domínio e DNS**
 
-1. No Firebase: **Hosting** → **Adicionar domínio personalizado** → `adotevica.com.br`. Depois `www.adotevica.com.br`, marcando para **redirecionar** para `adotevica.com.br`.
-2. O Firebase mostra os registros DNS necessários (um **TXT** de verificação e registros **A**). Cadastre-os no **DNS da Cloudflare**:
-   - nos registros do Firebase, com o proxy **desligado** (nuvem cinza, "DNS only"). Com a nuvem laranja, o Firebase não consegue emitir o certificado HTTPS;
-   - os registros **A** do Firebase **substituem** os que hoje apontam para a Hostinger (`adotevica.com.br` e `www`);
-   - **não mexa** em registros de e-mail (**MX**, SPF/DKIM em **TXT**) nem na verificação do Search Console.
-3. O certificado HTTPS leva de alguns minutos a algumas horas. Enquanto isso, o domínio pode mostrar aviso de certificado.
-4. **Para voltar atrás:** restaure na Cloudflare os registros A antigos (os da Hostinger). Anote-os antes de trocar.
-5. **Google Search Console:** nada muda (mesmo domínio, mesma verificação por meta tag, mesmo `sitemap_index.xml`). Peça a indexação da página inicial depois da troca.
-6. Mantenha a Hostinger e o WordPress parados por algumas semanas, como reserva, antes de cancelar.
+Configuração em vigor no **DNS da Cloudflare**, com o proxy **desligado** (nuvem cinza, "DNS only") em todos os registros. Com a nuvem laranja, o Firebase não consegue emitir nem renovar o certificado HTTPS.
 
-Depois disso, publicar é só fazer push na `main`: o GitHub gera, verifica e publica em poucos minutos. Se alguma verificação falhar, nada é publicado e o site continua na versão anterior.
+| Tipo | Nome | Valor | Para quê |
+|---|---|---|---|
+| A | `adotevica.com.br` | `199.36.158.100` | servidor do Firebase Hosting |
+| TXT | `adotevica.com.br` | `hosting-site=adote-vica` | prova ao Firebase que o domínio é nosso; **não apagar** |
+| CNAME | `www` | `adote-vica.web.app` | o Firebase redireciona o `www` para `adotevica.com.br` |
+
+O domínio não tem registros de e-mail (MX): nunca houve e-mail `@adotevica.com.br`.
+
+No Firebase (**Hosting** → **Domínios**):
+
+| Domínio | Modo |
+|---|---|
+| `adotevica.com.br` | **Veicular tráfego a partir deste domínio** (mostra o site) |
+| `www.adotevica.com.br` | **Redirecionar** para `adotevica.com.br` |
+
+Cuidados que ficaram da troca:
+
+- **Não marque o domínio principal para redirecionar para o `www`.** O endereço oficial do site, inclusive para o Google (`canonical`, sitemap e Search Console), é **sem** `www`.
+- **O `www` precisa ser CNAME para `adote-vica.web.app`**, e não para `adotevica.com.br`. Senão o Firebase não reconhece o `www` e não emite o certificado dele.
+- Depois de criar ou mudar o TXT, o Firebase pode levar **até 30 minutos** para enxergar a mudança: a Cloudflare manda guardar um "não existe" por esse tempo. Espere e clique em **Verificar** de novo.
+- Na troca, o certificado do domínio principal saiu em 3 minutos e o do `www` em 7. Até o certificado sair, o endereço mostra erro de certificado.
+
+**Para voltar ao WordPress** (enquanto a Hostinger não for cancelada): na Cloudflare, troque o registro **A** de `adotevica.com.br` para `45.132.157.101` (Hostinger) e mantenha o TXT. O WordPress volta a responder em poucos minutos.
+
+**Google Search Console:** nada mudou com a troca (mesmo domínio, mesma meta tag, mesmo `sitemap_index.xml`). Depois de mudanças importantes, peça a indexação da página inicial (seção 6).
+
+Publicar é só juntar na `main`: o GitHub gera, verifica e publica em cerca de 1 minuto. Se alguma verificação falhar, nada é publicado e o site continua na versão anterior.
 
 **Para desfazer uma publicação:** Firebase → **Hosting** → **Histórico de versões** → versão anterior → **Reverter**.
 
 ### 7.6 O que muda em relação ao WordPress
 
 - **Não há mais editor visual.** Textos e layout são alterados nos arquivos (seção 7.3) e publicados com push.
-- **O Duplicator, o Docker e o plugin `vica-custom` deixam de ser necessários** depois da troca: o Git passa a ser a fonte da verdade. Até lá, continuam valendo as seções 1 a 6.
+- **O Duplicator, o Docker e o plugin `vica-custom` não são mais necessários:** o Git é a fonte da verdade. As seções 1 a 5 ficam como referência enquanto o WordPress estiver de reserva na Hostinger. Depois do cancelamento, podem ser apagadas, junto com `plugins/`, `tools/svg/`, `Dockerfile` e `docker-compose.yml`.
 - **Formulários, blog ou área de login** não existem hoje no site. Se um dia forem necessários, dá para acrescentar ao Astro, ou usar um editor simples que grava no Git (Decap CMS, Pages CMS).
 
 ## Problemas comuns
