@@ -1,0 +1,178 @@
+---
+// "Nossos diferenciais": cartão largo com fundo ilustrado e 4 itens.
+const itens = [
+	{ icone: 'desde-2017', texto: 'Desde 2017 responsáveis por milhares de adoções de cães e gatos', ref: '15865e5' },
+	{ icone: 'orientacao', texto: 'Orientação direta e transparente com os adotantes.', ref: '7a0ba50' },
+	{ icone: 'equipe', texto: 'Equipe de veterinários e cuidadores experientes.', ref: '99656f0' },
+	{ icone: 'estrutura', texto: 'Estrutura clínica e protocolos de saúde padronizados.', ref: 'f68a5b9' },
+];
+---
+
+<section class="diferenciais" data-ref="2dee0be">
+	<div class="diferenciais__cartao" data-ref="a77ee8c">
+		<div class="diferenciais__cabecalho" data-ref="01755c0">
+			<h2 class="diferenciais__titulo" data-ref="86ae4e9">Nossos <span class="script">diferenciais</span></h2>
+			<img class="diferenciais__enfeite" src="/img/image-5.webp" alt="" width="126" height="131" data-ref="c578f77" />
+		</div>
+
+		<ul class="diferenciais__grade" data-ref="85b4629">
+			{
+				itens.map((item) => (
+					<li class="diferenciais__item" data-ref={item.ref}>
+						<img class="icone" src={`/img/icones/${item.icone}.svg`} alt="" width="75" height="75" loading="lazy" />
+						<p>{item.texto}</p>
+					</li>
+				))
+			}
+		</ul>
+	</div>
+</section>
+
+<style>
+	.diferenciais {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		min-height: 660px;
+		margin-top: 100px;
+		padding: 10px;
+		background: var(--branco);
+	}
+
+	.diferenciais__cartao {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		gap: 20px;
+		width: min(var(--cartao-largo), 100vw - 32px);
+		min-height: 618px;
+		padding: 10px;
+		flex: none;
+		background: url("/img/nossos-diferenciais-desk.svg") center / cover no-repeat;
+	}
+
+	.diferenciais__cabecalho {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		width: 100%;
+		padding: 10px;
+	}
+
+	.diferenciais__titulo {
+		width: 36%;
+		margin-left: 66px;
+		font-size: 44px;
+		text-align: center;
+	}
+
+	.diferenciais__titulo .script {
+		font-size: var(--script-titulo-44);
+	}
+
+	.diferenciais__enfeite {
+		width: 72px;
+		margin-right: 54px; /* o widget de imagem tinha 126px; a imagem, 57% dele */
+	}
+
+	.diferenciais__grade {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		gap: 20px;
+		width: 67%;
+		margin: 0 0 10px;
+		padding: 0;
+		list-style: none;
+	}
+
+	.diferenciais__item {
+		display: flex;
+		align-items: center;
+		gap: 16px;
+		padding: 23px;
+		border-radius: 11px;
+		background: var(--branco);
+	}
+
+	.diferenciais__item .icone {
+		width: 75px;
+		height: 75px;
+	}
+
+	.diferenciais__item p {
+		margin: 0;
+		font-size: 22px;
+		font-weight: 700;
+		color: var(--azul);
+	}
+
+	/* ---------- Tablet ---------- */
+	@media (max-width: 1024px) {
+		.diferenciais__cartao {
+			width: 100%;
+		}
+
+		.diferenciais__grade {
+			width: 100%;
+		}
+	}
+
+	/* ---------- Celular ---------- */
+	@media (max-width: 767px) {
+		.diferenciais {
+			min-height: 0;
+			margin-top: 0;
+			padding: 0 20px 24px;
+		}
+
+		.diferenciais__cartao {
+			justify-content: center;
+			min-height: 954px;
+			padding: 0 28px 32px;
+			border-radius: 16px;
+			background-image: url("/img/nossos-diferenciais.svg");
+			background-position: top center;
+		}
+
+		.diferenciais__cabecalho {
+			flex-direction: column;
+			gap: 0;
+		}
+
+		.diferenciais__titulo {
+			width: 100%;
+			margin: 0;
+			font-size: 32px;
+		}
+
+		.diferenciais__enfeite {
+			order: -1;
+			width: 54px;
+			margin: 24px 0 2px;
+		}
+
+		/* como no Elementor: as 2 primeiras linhas com a mesma altura */
+		.diferenciais__grade {
+			grid-template-columns: 1fr;
+			grid-template-rows: repeat(2, 1fr);
+			padding-inline: 16px;
+		}
+
+		/* no celular o ícone fica em cima do texto */
+		.diferenciais__item {
+			flex-direction: column;
+			text-align: center;
+		}
+
+		.diferenciais__item .icone {
+			width: 32px;
+			height: 32px;
+		}
+
+		.diferenciais__item p {
+			font-size: 18px;
+		}
+	}
+</style>

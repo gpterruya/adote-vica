@@ -17,6 +17,8 @@ Cópia local do site [adotevica.com.br](https://adotevica.com.br) (WordPress + E
 │   ├── assets/css/404.css     ← estilo da página 404
 │   ├── assets/img/*.svg       ← versões otimizadas de SVGs dos uploads
 │   └── templates/404.php      ← página 404 com o visual do site
+├── site/                      ← NOVO site estático em Astro (seção 7, em migração)
+├── .github/workflows/site.yml ← verificações automáticas do site estático
 ├── tools/svg/                 ← scripts para otimizar SVGs (seção 3.4)
 ├── duplicator/                ← WordPress restaurado (NÃO versionado)
 ├── dist/                      ← zips gerados para deploy (NÃO versionado)
@@ -436,6 +438,122 @@ Se depois de uma semana o resultado ainda mostrar o texto antigo, peça a remoç
 - **O site ganhar páginas novas:** o Yoast as inclui no `sitemap_index.xml` automaticamente. Não é preciso reenviar o sitemap.
 
 ---
+
+## 7. Site estático (Astro) — em migração
+
+A página inicial foi reconstruída em código na pasta `site/`, com o mesmo visual, os mesmos textos e as mesmas regras do site em WordPress. O objetivo é deixar de depender do Elementor (edição visual), do Duplicator (trazer a produção para a máquina) e do upload de zip, e publicar automaticamente a cada push.
+
+**Situação:** o site novo roda localmente e passa nas verificações, mas **ainda não está no ar**. A produção continua sendo o WordPress até a troca do DNS (seção 7.5).
+
+### 7.1 Como está organizado
+
+```text
+site/
+├── src/
+│   ├── pages/index.astro         ← página inicial (só monta as seções na ordem)
+│   ├── pages/404.astro           ← página "não encontrada"
+│   ├── pages/sitemap_index.xml.ts← sitemap no mesmo endereço do Yoast
+│   ├── components/*.astro        ← uma seção por arquivo: Hero, QuemAdota, Diferenciais,
+│   │                               Processo, ImportanteSaber, Protocolos, Custos,
+│   │                               Compromissos, Parceiros, NaMidia, Faq,
+│   │                               ProntoParaAdotar, Rodape
+│   ├── layouts/Base.astro        ← <head> (SEO, Tag Manager, ícones) e botão de telefone
+│   ├── data/site.ts              ← título, descrição, telefone, endereço, IDs do Google
+│   └── styles/global.css         ← fontes, cores, botões e regras comuns
+├── public/                       ← arquivos copiados como estão
+│   ├── img/                      ← imagens (as mesmas dos uploads do WordPress)
+│   ├── fonts/                    ← TT Hazelnuts e Intro Script
+│   ├── _headers, _redirects      ← cache e redirecionamentos do Cloudflare Pages
+│   └── robots.txt
+└── scripts/
+    ├── verificar.mjs             ← regras que bloqueiam a publicação (7.4)
+    ├── capturas.mjs              ← capturas de tela em 6 tamanhos de tela
+    ├── converter-webp.mjs        ← converte PNG/JPG para WebP
+    └── comparar.js               ← compara medidas com o site antigo (migração)
+```
+
+Cada seção tem o texto no próprio arquivo, em HTML simples, e o CSS logo abaixo, no bloco `<style>` (vale só para aquela seção). Os breakpoints são os mesmos do Elementor: celular até 767px, tablet de 768 a 1024px, computador a partir de 1025px.
+
+As seções que no Elementor existiam duas vezes (uma para computador e outra para tablet/celular: "Quem adota muda vidas" e "ONGs e protetores parceiros") agora são **uma só**, e o CSS reorganiza a ordem dos blocos. Um texto não pode mais ficar diferente entre os aparelhos.
+
+Os atributos `data-ref="…"` são os IDs dos elementos do Elementor equivalentes. Servem para comparar medidas com o site antigo durante a migração e podem ser removidos depois.
+
+### 7.2 Rodar localmente
+
+O Node 22 está instalado no Ubuntu, em `~/.local/node` (sem sudo). Para usar no terminal:
+
+```bash
+export PATH="$HOME/.local/node/bin:$PATH"
+```
+
+```bash
+cd ~/adote-vica/site && npm install
+```
+
+```bash
+npm run dev
+```
+
+O site abre em `http://localhost:4321` e se atualiza sozinho a cada arquivo salvo. Não precisa de Docker nem de banco de dados.
+
+Para gerar a versão final e rodar as verificações (o mesmo que o GitHub faz):
+
+```bash
+npm run build && npm run check
+```
+
+### 7.3 Mudar um texto, uma imagem ou o telefone
+
+| O que | Onde |
+|---|---|
+| Texto de uma seção | `site/src/components/<Seção>.astro` |
+| Telefone, endereço, título e descrição do Google | `site/src/data/site.ts` (vale para o site inteiro) |
+| Perguntas frequentes | `site/src/components/Faq.astro` (lista no topo do arquivo) |
+| Reportagens "Na mídia" | `site/src/components/NaMidia.astro` (lista no topo do arquivo) |
+| Imagem nova | coloque em `site/public/img/` e use `/img/nome.webp` |
+
+Ao colar texto vindo de e-mail ou documento, confira que não vieram aspas curvas ou espaços estranhos. Não use `R$`: a verificação bloqueia a publicação (ver "Valores de serviços", seção 3.3).
+
+### 7.4 Verificações automáticas (GitHub Actions)
+
+A cada push na `main` e a cada pull request que mexa em `site/`, o GitHub roda `.github/workflows/site.yml`:
+
+1. **Gera o site** (`npm run build`).
+2. **Verifica** (`scripts/verificar.mjs`). Qualquer erro bloqueia:
+   - valor em reais (`R$ 123`) em qualquer arquivo — exigência do jurídico;
+   - página sem exatamente um `<h1>`, sem `<title>`, sem descrição ou sem `canonical`;
+   - Google Tag Manager (`GTM-5QDXJBK2`) ou verificação do Search Console ausentes;
+   - link de telefone `(11) 3885-0749` ausente;
+   - imagem sem `alt`, link interno quebrado ou âncora (`#contato`, `#compromissos`) inexistente.
+3. **Tira capturas de tela** da página inteira em celular (375 e 740 deitado), tablet (768 e 1024 deitado), notebook (1366) e computador (1440), e falha se aparecer **rolagem horizontal** em algum deles. As capturas ficam para download por 14 dias na execução (aba *Actions* → execução → *Artifacts* → `capturas`).
+
+Localmente, as capturas precisam de bibliotecas do sistema que pedem senha de administrador, uma vez só: `sudo npx playwright install-deps chromium` dentro de `site/`. Depois: `npm run preview` em um terminal e `node scripts/capturas.mjs` em outro.
+
+### 7.5 Colocar no ar (Cloudflare Pages) — passos pendentes
+
+Feitos uma vez, no painel da Cloudflare (a conta do DNS):
+
+1. **Workers & Pages** → **Create** → **Pages** → **Connect to Git** → autorizar o GitHub e escolher este repositório.
+2. Configuração do build:
+   - **Production branch:** `main`
+   - **Framework preset:** Astro
+   - **Root directory:** `site`
+   - **Build command:** `npm run build && npm run check`
+   - **Build output directory:** `dist`
+   - Variável de ambiente `NODE_VERSION` = `22`
+3. Salvar. O primeiro build publica em um endereço `*.pages.dev`. Cada pull request ganha um endereço de prévia próprio.
+4. Conferir a versão `*.pages.dev` em celular, tablet e computador.
+5. **Trocar o domínio:** no projeto do Pages → **Custom domains** → adicionar `adotevica.com.br` e `www.adotevica.com.br`. A Cloudflare troca os registros DNS (que hoje apontam para a Hostinger). Isso é o que coloca o site novo no ar; para voltar atrás, basta remover o domínio do Pages e restaurar os registros antigos.
+6. No **Google Search Console**: nada muda (mesmo domínio, mesma verificação por meta tag e o mesmo `sitemap_index.xml`). Pedir a indexação da página inicial depois da troca.
+7. Manter a Hostinger e o WordPress parados por algumas semanas como reserva antes de cancelar.
+
+Depois da troca, publicar é só fazer push na `main`: o Cloudflare gera e publica em cerca de 1 minuto. Se `npm run check` falhar, o Cloudflare não publica e o site continua na versão anterior. Para desfazer uma publicação: painel do Pages → **Deployments** → versão anterior → **Rollback**.
+
+### 7.6 O que muda em relação ao WordPress
+
+- **Não há mais editor visual.** Textos e layout são alterados nos arquivos (seção 7.3) e publicados com push.
+- **O Duplicator, o Docker e o plugin `vica-custom` deixam de ser necessários** depois da troca: o Git passa a ser a fonte da verdade. Até lá, continuam valendo as seções 1 a 6.
+- **Formulários, blog ou área de login** não existem hoje no site. Se um dia forem necessários, dá para acrescentar ao Astro, ou usar um editor simples que grava no Git (Decap CMS, Pages CMS).
 
 ## Problemas comuns
 

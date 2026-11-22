@@ -41,3 +41,15 @@ Thumbs.db
 # =========================================================
 
 /dist/
+
+# Material de referência do site antigo (HTML/CSS baixados da produção)
+/.ref/
+
+# =========================================================
+# Site estático (Astro)
+# =========================================================
+
+/site/node_modules/
+/site/dist/
+/site/.astro/
+/site/capturas/

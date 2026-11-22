@@ -1,0 +1,59 @@
+# Site estático (pasta site/): gera, verifica e tira capturas de tela a cada
+# push e pull request. A publicação em si é feita pelo Cloudflare Pages,
+# conectado a este repositório (ver README, seção "Site estático").
+name: Site
+
+on:
+  push:
+    branches: [main]
+    paths: ['site/**', '.github/workflows/site.yml']
+  pull_request:
+    paths: ['site/**', '.github/workflows/site.yml']
+
+permissions:
+  contents: read
+
+concurrency:
+  group: site-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verificar:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: site
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: site/package-lock.json
+
+      - name: Instalar dependências
+        run: npm ci
+
+      - name: Gerar o site
+        run: npm run build
+
+      - name: Verificar (sem valores em R$, SEO, GTM, links, alt das imagens…)
+        run: npm run check
+
+      - name: Instalar o navegador para as capturas
+        run: npx playwright install --with-deps chromium
+
+      - name: Capturas de tela (celular, tablet, computador) e rolagem horizontal
+        run: |
+          npx astro preview --port 4321 &
+          npx wait-on http://localhost:4321/ --timeout 60000
+          node scripts/capturas.mjs http://localhost:4321/ capturas
+
+      - name: Guardar as capturas
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: capturas
+          path: site/capturas/
+          retention-days: 14

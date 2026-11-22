@@ -1,0 +1,194 @@
+---
+// Página 404 (o Cloudflare Pages a serve com status 404 para qualquer
+// endereço que não exista). Mesmo visual da 404 do plugin vica-custom.
+import Base from '../layouts/Base.astro';
+import { site } from '../data/site';
+const ano = new Date().getFullYear();
+---
+
+<Base title="Página não encontrada - Adote Vi.Ca" noindex>
+	<div class="p404">
+		<header class="p404__header">
+			<a href="/" aria-label="Adote Vi.Ca — página inicial">
+				<img src="/img/logo-topo.svg" alt="Vi.Ca" width="178" height="47" />
+			</a>
+		</header>
+
+		<main class="p404__main">
+			<div class="p404__card">
+				<div>
+					<p class="p404__ops">ops!</p>
+					<h1 class="p404__titulo">Página não encontrada</h1>
+					<p class="p404__descricao">
+						O endereço que você tentou acessar não existe ou mudou de lugar. Mas os nossos pets continuam esperando por um lar.
+					</p>
+					<a class="botao p404__botao" href="/">voltar para o início</a>
+					<p class="p404__contato">
+						ou fale com a equipe: <a href={`tel:${site.telefone.e164}`}>{site.telefone.exibicao}</a>
+					</p>
+				</div>
+				<img class="p404__imagem" src="/img/pet-1024x817.webp" alt="Buldogue e gato em caminhas" width="1024" height="817" />
+			</div>
+		</main>
+
+		<footer class="p404__footer">
+			<p><strong>Centro de Adoção Responsável</strong></p>
+			<p>{site.endereco} · <a href={`tel:${site.telefone.e164}`}>{site.telefone.exibicao}</a></p>
+			<p>© {ano} Adote Vi.Ca. Todos os direitos reservados.</p>
+		</footer>
+	</div>
+</Base>
+
+<style>
+	.p404 {
+		display: flex;
+		flex-direction: column;
+		min-height: 100vh;
+	}
+
+	.p404 a {
+		color: var(--azul);
+	}
+
+	.p404__header {
+		width: 100%;
+		max-width: 1140px;
+		margin: 0 auto;
+		padding: 24px 20px 0;
+	}
+
+	.p404__header img {
+		display: block;
+		width: 140px;
+	}
+
+	.p404__main {
+		flex: 1;
+		display: flex;
+		align-items: center;
+		padding: 24px 20px 48px;
+	}
+
+	.p404__card {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		align-items: center;
+		gap: 32px;
+		width: 100%;
+		max-width: 1140px;
+		margin: 0 auto;
+		padding: 48px 56px;
+		border-radius: 32px;
+		background: var(--bege);
+	}
+
+	.p404__ops {
+		margin: 0;
+		font-family: var(--fonte-script);
+		font-size: 88px;
+		line-height: 1;
+		color: var(--azul);
+	}
+
+	.p404__titulo {
+		margin: 8px 0 16px;
+		font-size: 44px;
+		line-height: 1.1;
+	}
+
+	.p404__descricao {
+		max-width: 30em;
+		margin: 0 0 32px;
+		font-size: 20px;
+	}
+
+	.p404 .p404__botao {
+		padding: 20px 32px;
+		font-size: 18px;
+		color: var(--bege);
+	}
+
+	.p404__contato {
+		margin: 20px 0 0;
+	}
+
+	.p404__imagem {
+		display: block;
+		width: 100%;
+	}
+
+	.p404__footer {
+		padding: 24px 20px 96px; /* espaço para o botão flutuante de telefone */
+		background: var(--bege);
+		color: #333;
+		font-size: 14px;
+		text-align: center;
+	}
+
+	.p404__footer p {
+		margin: 0 0 4px;
+	}
+
+	.p404 .p404__footer a {
+		color: inherit;
+	}
+
+	@media (max-width: 1024px) {
+		.p404__card {
+			padding: 40px;
+		}
+
+		.p404__ops {
+			font-size: 72px;
+		}
+
+		.p404__titulo {
+			font-size: 36px;
+		}
+
+		.p404__descricao {
+			font-size: 18px;
+		}
+	}
+
+	@media (max-width: 767px) {
+		.p404__header {
+			text-align: center;
+		}
+
+		.p404__header img {
+			width: 120px;
+			margin: 0 auto;
+		}
+
+		.p404__main {
+			padding: 16px 16px 32px;
+		}
+
+		.p404__card {
+			grid-template-columns: 1fr;
+			gap: 24px;
+			padding: 32px 24px;
+			border-radius: 24px;
+			text-align: center;
+		}
+
+		.p404__ops {
+			font-size: 64px;
+		}
+
+		.p404__titulo {
+			font-size: 30px;
+		}
+
+		.p404__descricao {
+			margin: 0 auto 24px;
+			font-size: 16px;
+		}
+
+		.p404__imagem {
+			max-width: 320px;
+			margin: 0 auto;
+		}
+	}
+</style>

@@ -1,0 +1,217 @@
+---
+// "Na mídia": reportagens sobre o Vi.Ca.
+const materias = [
+	{
+		veiculo: 'Portal Vipzinho',
+		titulo: 'Por que o processo de adoção de cães é tão rigoroso? Clínica de São Paulo detalha cada etapa; saiba tudo',
+		imagem: { src: '/img/portal-vipzinho.webp', largura: 467, altura: 195 },
+		link: 'https://vipzinho.com.br/por-que-o-processo-de-adocao-de-caes-e-tao-rigoroso-clinica-de-sao-paulo-detalha-cada-etapa-saiba-tudo/',
+		ref: 'a87baab',
+	},
+	{
+		veiculo: 'Portal Vipzinho',
+		titulo: 'Resgatados de canil, Dálmatas filhotes estão disponíveis para adoção em petshop de São Paulo',
+		imagem: { src: '/img/Union-1.webp', largura: 467, altura: 195 },
+		link: 'https://vipzinho.com.br/resgatados-de-canil-dalmatas-filhotes-estao-disponiveis-para-adocao-em-petshop-de-sao-paulo/',
+		ref: '7fc3516',
+	},
+	{
+		veiculo: 'Record News',
+		titulo: 'Reportagem realizada pela Rede Record mostrando um pouco mais sobre o Adote Vi.Ca.',
+		imagem: { src: '/img/frame_4.webp', largura: 467, altura: 195, arredondada: true },
+		link: 'https://www.instagram.com/reel/DCxqZEtJe_7/?igsh=MWRpeXB4d2s4YWdyMQ%3D%3D',
+		ref: '5530339',
+	},
+	{
+		veiculo: 'Panorama Pet&Vet',
+		titulo: 'Adote Vica muda a lógica da adoção no Brasil',
+		imagem: { src: '/img/panorama-pet-vet.webp', largura: 1024, altura: 428, arredondada: true },
+		// ⚠️ No site antigo este botão aponta para o mesmo reel da Record News.
+		link: 'https://www.instagram.com/reel/DCxqZEtJe_7/?igsh=MWRpeXB4d2s4YWdyMQ%3D%3D',
+		ref: 'ae938a5',
+		tituloMenor: true,
+	},
+];
+---
+
+<section class="midia" data-ref="8a41f57">
+	<div class="wrap midia__conteudo">
+		<h2 class="midia__titulo" data-ref="25aa0f3"><span class="script">Na mídia</span></h2>
+		<img class="sublinhado midia__sublinhado" src="/img/sublinhado.svg" alt="" width="203" height="3" />
+		<p class="midia__subtitulo" data-ref="5c6a3ed">Reportagens e matérias</p>
+
+		<ul class="midia__grade" data-ref="5311693">
+			{
+				materias.map((m) => (
+					<li class="midia__item" data-ref={m.ref}>
+						<img
+							class:list={['midia__imagem', { 'midia__imagem--arredondada': m.imagem.arredondada }]}
+							src={m.imagem.src}
+							alt={`Logo ${m.veiculo}`}
+							width={m.imagem.largura}
+							height={m.imagem.altura}
+							loading="lazy"
+						/>
+						<h3 class:list={['midia__veiculo', { 'midia__veiculo--menor': m.tituloMenor }]}>{m.veiculo}</h3>
+						<img class="sublinhado" src="/img/sublinhado.svg" alt="" width="203" height="3" />
+						<p class="midia__texto">{m.titulo}</p>
+						<a class="botao-contorno" href={m.link} target="_blank" rel="noopener">
+							ver matéria<span class="visualmente-oculto">: {m.titulo}</span>
+						</a>
+					</li>
+				))
+			}
+		</ul>
+	</div>
+</section>
+
+<style>
+	.midia {
+		padding-block: 10px;
+	}
+
+	.midia__conteudo {
+		display: flex;
+		flex-direction: column;
+		gap: 20px;
+		min-height: 757px;
+	}
+
+	.midia__titulo {
+		align-self: center;
+		width: 77%;
+		margin-top: 44px;
+		text-align: center;
+	}
+
+	.midia__titulo .script {
+		font-size: var(--script-titulo);
+	}
+
+	.midia__sublinhado {
+		align-self: center;
+		margin-top: 0;
+	}
+
+	.midia__subtitulo {
+		margin: 0;
+		font-size: 38px;
+		line-height: 1;
+		color: var(--cinza);
+		text-align: center;
+	}
+
+	.midia__grade {
+		display: flex;
+		gap: 20px;
+		margin: 24px 0 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	.midia__item {
+		display: flex;
+		flex-direction: column;
+		gap: 20px;
+		width: 50%;
+		min-height: 310px;
+		padding: 50px;
+		border-radius: 11px;
+		background: var(--bege);
+	}
+
+	.midia__imagem--arredondada {
+		border-radius: 10px;
+	}
+
+	.midia__veiculo {
+		font-weight: 700;
+		font-size: 22px;
+		line-height: 1.5;
+		color: #54595f;
+	}
+
+	.midia__veiculo--menor {
+		font-size: 18px;
+	}
+
+	.midia__item .sublinhado {
+		margin-top: 3px;
+	}
+
+	.midia__texto {
+		flex-grow: 1;
+		margin-top: -14px;
+		font-size: 18px;
+		color: var(--cinza-suave);
+	}
+
+	.midia__item .botao-contorno {
+		align-self: flex-start;
+	}
+
+	/* ---------- Tablet: 2 por linha ---------- */
+	@media (max-width: 1024px) {
+		.midia__grade {
+			flex-wrap: wrap;
+		}
+
+		.midia__item {
+			width: 48%;
+			flex-grow: 1;
+		}
+	}
+
+	/* ---------- Celular ---------- */
+	@media (max-width: 767px) {
+		.midia {
+			padding: 0;
+		}
+
+		.midia__conteudo {
+			min-height: 0;
+		}
+
+		.midia__titulo {
+			margin-top: 32px;
+		}
+
+		.midia__sublinhado {
+			margin-top: -3px;
+		}
+
+		.midia__subtitulo {
+			margin-top: -8px;
+			font-size: 28px;
+		}
+
+		.midia__titulo {
+			line-height: 49px;
+		}
+
+		.midia__grade {
+			flex-direction: column;
+			gap: 0;
+		}
+
+		.midia__item {
+			width: 100%;
+			margin-top: 24px;
+			padding: 24px;
+			align-items: center;
+			text-align: center;
+		}
+
+		.midia__item:first-child {
+			padding: 26px;
+		}
+
+		.midia__texto {
+			font-size: 16px;
+		}
+
+		.midia__item .botao-contorno {
+			align-self: center;
+		}
+	}
+</style>

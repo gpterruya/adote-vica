@@ -1,0 +1,160 @@
+---
+// "Pronto para adotar?": chamada final com botão para o rodapé (contato).
+---
+
+<section class="pronto" data-ref="b143f3f">
+	<div class="pronto__cartao" data-ref="955b264">
+		<div class="pronto__grade" data-ref="fc74664">
+			<div class="pronto__texto" data-ref="afc0c8e">
+				<h2 class="pronto__titulo" data-ref="79df1b8">Pronto para <br /><span class="script">adotar?</span></h2>
+				<p data-ref="8096de8">
+					Nossa equipe vai orientar cada etapa, indicar o animal mais compatível e garantir uma adoção clara, responsável e definitiva.
+				</p>
+				<a class="botao pronto__botao" href="#contato" data-ref="6b34ca4">fale com a equipe</a>
+			</div>
+			<div class="pronto__foto" data-ref="02f185d">
+				<img src="/img/pet-1024x817.webp" alt="Buldogue e gato em caminhas" width="1024" height="817" loading="lazy" data-ref="937daee" />
+			</div>
+		</div>
+	</div>
+</section>
+
+<style>
+	.pronto {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		min-height: 874px;
+		padding: 10px;
+	}
+
+	.pronto__cartao {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		width: min(var(--cartao-largo), 100vw - 32px);
+		min-height: 705px;
+		flex: none;
+		padding: 10px;
+		border-radius: 64px;
+		background: url("/img/ongs-e-parceiros-desk.svg") top center / cover no-repeat;
+	}
+
+	.pronto__grade {
+		display: flex;
+		gap: 20px;
+		width: 100%;
+		padding: 10px;
+	}
+
+	.pronto__texto {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: flex-start;
+		gap: 20px;
+		flex: 0 0 36%;
+		padding: 0 0 0 176px;
+	}
+
+	.pronto__titulo {
+		margin: -25px -25px -66px 0;
+		font-size: 44px;
+	}
+
+	.pronto__titulo .script {
+		font-size: var(--script-titulo);
+	}
+
+	.pronto__texto p {
+		margin-top: 61px;
+		font-size: 18px;
+		color: var(--cinza);
+	}
+
+	.pronto__botao {
+		padding: 21px;
+	}
+
+	.pronto__foto {
+		display: flex;
+		align-items: center;
+		flex: 1;
+		padding: 10px;
+	}
+
+	.pronto__foto img {
+		width: 41vw;
+		max-width: 50vw;
+		margin-left: -54px;
+	}
+
+	/* ---------- Tablet ---------- */
+	@media (max-width: 1024px) {
+		.pronto__cartao {
+			width: 100%;
+		}
+
+		.pronto__grade {
+			flex-direction: column;
+		}
+
+		.pronto__texto {
+			flex-basis: auto;
+			width: 100%;
+		}
+	}
+
+	/* ---------- Celular ---------- */
+	@media (max-width: 767px) {
+		.pronto {
+			min-height: 0;
+			padding: 24px 20px;
+		}
+
+		.pronto__cartao {
+			min-height: 601px;
+			padding: 0 36px;
+			border-radius: 16px;
+			background-image: url("/img/nossos-diferenciais.svg");
+		}
+
+		.pronto__grade {
+			flex-direction: column-reverse;
+			align-items: center;
+		}
+
+		.pronto__texto {
+			align-items: center;
+			margin-top: -22px;
+			padding: 0;
+			text-align: center;
+		}
+
+		.pronto__titulo {
+			margin: 0;
+			font-size: 32px;
+		}
+
+		.pronto__texto p {
+			margin-top: -12px;
+			font-size: 16px;
+		}
+
+		.pronto__botao {
+			width: 100%;
+			padding: 16px;
+		}
+
+		.pronto__foto {
+			justify-content: center;
+		}
+
+		.pronto__foto img {
+			width: 257px;
+			max-width: 257px;
+			margin-left: -37px;
+		}
+	}
+</style>

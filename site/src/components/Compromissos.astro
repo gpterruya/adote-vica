@@ -1,0 +1,217 @@
+---
+// Faixa azul + "Compromissos e limites" + faixa laranja.
+// (O antigo bloco "Valores de referência", com preços, foi removido a
+// pedido do jurídico; a faixa azul foi mantida.)
+---
+
+<section class="compromissos" data-ref="c6a37b5">
+	<div class="wrap compromissos__conteudo">
+		<div class="compromissos__faixa compromissos__faixa--azul" data-ref="fb6a879">
+			<p class="compromissos__faixa-texto" data-ref="44811d2">
+				Valores refletem protocolos clínicos reais e podem variar conforme espécie e avaliação médica.
+			</p>
+		</div>
+
+		<h2 class="compromissos__titulo" id="compromissos" data-ref="02ab2ae"><span class="script">Compromissos</span> e limites</h2>
+
+		<div class="compromissos__cartoes" data-ref="2fce4ff">
+			<div class="compromissos__cartao" data-ref="b185580">
+				<h3 class="titulo-icone" data-ref="2c197a0">
+					<img src="/img/icones/joinha.svg" alt="" width="30" height="30" />
+					O que fazemos
+				</h3>
+				<img class="sublinhado" src="/img/sublinhado.svg" alt="" width="203" height="3" />
+				<ul class="compromissos__lista" data-ref="60ba89f">
+					<li>Aplicamos protocolos de saúde em todos os animais.</li>
+					<li>Garantimos ambiente limpo e monitorado.</li>
+					<li>Castração com equipe veterinária especializada.</li>
+					<li>Orientação clara.</li>
+				</ul>
+			</div>
+
+			<div class="compromissos__cartao" data-ref="cd1cff7">
+				<h3 class="titulo-icone" data-ref="e2e455f">
+					<img src="/img/icones/joinha-baixo.svg" alt="" width="30" height="30" />
+					O que não fazemos
+				</h3>
+				<img class="sublinhado" src="/img/sublinhado.svg" alt="" width="203" height="3" />
+				<ul class="compromissos__lista" data-ref="4e18f8c">
+					<li>Não garantimos a saúde do animal</li>
+					<li>Não temos o histórico clínico dos animais pois não sabemos sua procedência</li>
+				</ul>
+			</div>
+		</div>
+
+		<div class="compromissos__faixa compromissos__faixa--laranja" data-ref="5c9129d">
+			<p class="compromissos__faixa-texto" data-ref="c36a633">
+				Adoção é responsabilidade. Preparamos e orientamos, mas a continuidade do cuidado é do adotante.
+			</p>
+		</div>
+	</div>
+</section>
+
+<style>
+	.compromissos {
+		padding-block: 10px;
+	}
+
+	.compromissos__conteudo {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		gap: 20px;
+	}
+
+	.compromissos__faixa {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		padding: 10px;
+		border-radius: 11px;
+		background-position: center;
+		background-size: cover;
+		background-repeat: no-repeat;
+	}
+
+	.compromissos__faixa-texto {
+		margin: 0;
+		font-weight: 700;
+		font-size: 26px;
+		color: var(--bege);
+	}
+
+	.compromissos__faixa--azul {
+		min-height: 160px;
+		margin-top: 40px;
+		background-image: url("/img/Group-36.webp");
+	}
+
+	.compromissos__faixa--azul .compromissos__faixa-texto {
+		align-self: flex-end;
+		width: 61%;
+		line-height: 34px;
+	}
+
+	.compromissos__titulo {
+		align-self: center;
+		width: 77%;
+		margin-top: 70px;
+		font-size: 44px;
+		text-align: center;
+		scroll-margin-top: 24px;
+	}
+
+	.compromissos__titulo .script {
+		font-size: var(--script-titulo);
+	}
+
+	.compromissos__cartoes {
+		display: flex;
+		justify-content: center;
+		gap: 30px;
+		width: 100%;
+	}
+
+	.compromissos__cartao {
+		display: flex;
+		flex-direction: column;
+		gap: 20px;
+		width: 50%;
+		min-height: 310px;
+		padding: 32px;
+		border-radius: 11px;
+		background: var(--bege);
+	}
+
+	.compromissos__cartao .sublinhado {
+		margin-top: 3px;
+	}
+
+	.compromissos__lista {
+		margin-top: -18px;
+		font-size: 18px;
+		color: var(--cinza-suave);
+	}
+
+	.compromissos__faixa--laranja {
+		min-height: 176px;
+		margin-top: -8px;
+		background-image: url("/img/Group-35.webp");
+	}
+
+	.compromissos__faixa--laranja .compromissos__faixa-texto {
+		align-self: flex-start;
+		width: 45%;
+		margin: 23px 0 0 50px;
+		line-height: 31px;
+	}
+
+	@media (max-width: 1024px) {
+		.compromissos__faixa--laranja .compromissos__faixa-texto {
+			margin-top: 38px;
+		}
+	}
+
+	/* ---------- Celular ---------- */
+	@media (max-width: 767px) {
+		.compromissos {
+			padding: 24px 0 0;
+		}
+
+		.compromissos__faixa--azul {
+			align-self: center;
+			justify-content: flex-start;
+			flex-direction: column;
+			width: 280px;
+			min-height: 279px;
+			margin-top: 24px;
+			padding: 20px;
+			background-image: url("/img/Mask-group.webp");
+			background-position: bottom center;
+		}
+
+		.compromissos__faixa--azul .compromissos__faixa-texto {
+			align-self: auto;
+			width: 100%;
+			font-size: 18px;
+			line-height: 1.9em;
+			text-align: center;
+		}
+
+		.compromissos__titulo {
+			margin-top: 24px;
+			font-size: 32px;
+		}
+
+		.compromissos__cartoes {
+			flex-direction: column;
+			gap: 20px;
+		}
+
+		.compromissos__cartao {
+			width: 100%;
+		}
+
+		.compromissos__lista {
+			margin-top: -14px;
+			font-size: 16px;
+		}
+
+		.compromissos__faixa--laranja {
+			flex-direction: column;
+			justify-content: flex-start;
+			min-height: 354px;
+			background-image: url("/img/Group-33.webp");
+		}
+
+		.compromissos__faixa--laranja .compromissos__faixa-texto {
+			align-self: center;
+			width: 267px;
+			margin: 12px 0 0;
+			font-size: 24px;
+			line-height: 33px;
+			text-align: center;
+		}
+	}
+</style>
